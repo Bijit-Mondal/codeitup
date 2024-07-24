@@ -1,0 +1,18 @@
+{
+  "problem_name": "ThreeSum",
+  "function_name": "threeSum",
+  "input": [
+    {
+      "name": "arr",
+      "type": "list<int>"
+    },
+    {
+      "name": "size",
+      "type": "int"
+    }
+  ],
+  "output": {
+    "name": "result",
+    "type": "list<int>"
+  }
+}
