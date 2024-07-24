@@ -1,0 +1,18 @@
+{
+  "problem_name": "TwoSum",
+  "function_name": "twoSum",
+  "input": [
+    {
+      "name": "arr",
+      "type": "list<int>"
+    },
+    {
+      "name": "size",
+      "type": "int"
+    }
+  ],
+  "output": {
+    "name": "result",
+    "type": "int"
+  }
+}
