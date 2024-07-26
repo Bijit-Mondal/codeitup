@@ -94,8 +94,8 @@ public class Generate {
         StringBuilder outputReturnType = new StringBuilder();
         String outputType = output.get("type").asText();
         outputReturnType.append(javaTypeMap.getOrDefault(outputType, outputType));
-        return String.format("public %s %s(%s) {\n    // Implementation goes here\n    return %s;\n}\n",
-                outputReturnType.toString(), functionName, inputParams.toString(), output.get("name").asText());
+        return String.format("class %s {\n public static %s %s(%s) {\n    // Implementation goes here\n    return %s;\n }\n}\n",
+                problemName,outputReturnType.toString(), functionName, inputParams.toString(), output.get("name").asText());
     }
 
     private String generateJSBoilerplate(String functionName, JsonNode inputs, JsonNode output) {
@@ -126,7 +126,7 @@ public class Generate {
                 outputReturnType.toString(), functionName, inputParams.toString(), output.get("name").asText());
     }
 
-    private static void saveToFile(String fileName, String content) {
+    public static void saveToFile(String fileName, String content) {
         System.out.println("Saving to file: " + fileName);
         try (FileWriter fileWriter = new FileWriter(fileName)) {
             fileWriter.write(content);

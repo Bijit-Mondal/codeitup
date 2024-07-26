@@ -5,10 +5,6 @@
     {
       "name": "arr",
       "type": "list<int>"
-    },
-    {
-      "name": "size",
-      "type": "int"
     }
   ],
   "output": {

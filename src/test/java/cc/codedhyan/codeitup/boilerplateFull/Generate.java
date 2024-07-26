@@ -1,4 +1,4 @@
-package cc.codedhyan.codeitup.RunnerFull;
+package cc.codedhyan.codeitup.boilerplateFull;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,10 +14,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static cc.codedhyan.codeitup.boilerplate.Generate.saveToFile;
+
 public class Generate {
 
     private static final Map<String, String> cTypeMap = new HashMap<>();
     private static final Map<String, String> javaTypeMap = new HashMap<>();
+    private static final Map<String, String> javaParserMap = new HashMap<>();
 
     static {
         // C type mappings
@@ -36,6 +39,12 @@ public class Generate {
         javaTypeMap.put("long long", "long");
         javaTypeMap.put("HashMap<String, String>", "HashMap<String, String>");
         // Add more Java type mappings as needed
+
+        javaParserMap.put("int", "Integer");
+        javaParserMap.put("double", "Double");
+        javaParserMap.put("long long", "Long");
+        javaParserMap.put("char","Character");
+        javaParserMap.put("string","String");
     }
 
 
@@ -63,60 +72,92 @@ public class Generate {
             JsonNode output = structure.get("output");
 
             // Generate full-Runner code
-//            String cRunner = generateCRunner(functionName, inputs, output);
-            String jsRunner = generateJSRunner(functionName, inputs, output);
-//            String javaRunner = generateJavaRunner(problemName, functionName, inputs, output);
+            String javaRunner = generateJavaRunner(problemName, functionName, inputs, output);
 
-//            System.out.println("C Runner: "+ cRunner);
-            System.out.println("JS Runner: "+ jsRunner);
-//            System.out.println("Java Runner: "+ javaRunner);
+            Path runnerDir = structureFilePath.getParent().resolve("runner");
+            Files.createDirectories(runnerDir);
+
+            saveToFile(runnerDir.resolve("Solution.java").toString(), javaRunner);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-//    private String generateJavaRunner(String problemName, String functionName, JsonNode inputs, JsonNode output) {
-//        StringBuilder inputSet = new StringBuilder();
-//        StringBuilder outputSet = new StringBuilder();
-//        for(JsonNode input : inputs) {
-//
-//        }
-//    }
+    private String generateJavaRunner(String problemName, String functionName, JsonNode inputs, JsonNode output) {
+        StringBuilder inputReads = new StringBuilder();
+        int inputReadIndex = 0;
+        StringBuilder paramList = new StringBuilder();
+        for(JsonNode input:inputs){
+            paramList.append(String.format("%s,",input.get("name").asText()));
+            if (input.get("type").asText().startsWith("list<")) {
+                String type = input.get("type").asText().substring(5, input.get("type").asText().length() - 1);
+                String parse = type.substring(0, 1).toUpperCase() + type.substring(1);
 
-    private String generateJSRunner(String functionName, JsonNode inputs, JsonNode output) {
-        StringBuilder inputSetup = new StringBuilder();
-        for (int i = 0; i < inputs.size(); i++) {
-            JsonNode input = inputs.get(i);
-            if (i == 0) {
-                inputSetup.append("const ").append(input.get("name").asText()).append(" = ");
+                inputReads.append(String.format("""
+                    int size_%s = Integer.parseInt(lines.get(%d).trim());
+                    %s %s = new ArrayList<>(size_%s);
+                    String[] inputStr_%s = lines.get(%d).split("\\s+");
+                    for (String str : inputStr_%s) {
+                        %s.add(%s.parse%s(str));
+                    }
+                    """,
+                        input.get("name").asText(),
+                        inputReadIndex++,
+                        javaTypeMap.get(input.get("type").asText()),
+                        input.get("name").asText(),
+                        input.get("name").asText(),
+                        input.get("name").asText(),
+                        inputReadIndex++,
+                        input.get("name").asText(),
+                        input.get("name").asText(),
+                        javaParserMap.get(type),
+                        parse
+                ));
             } else {
-                inputSetup.append("const ").append(input.get("name").asText()).append(" = ");
+                inputReads.append(String.format("""
+                    %s %s = 0;
+                    """,
+                        javaTypeMap.get(input.get("type").asText()),
+                        input.get("name").asText()
+                ));
             }
-            inputSetup.append("require('fs').readFileSync('/dev/problems/")
-                    .append(functionName).append("/tests/inputs/##INPUT_FILE_INDEX##.txt', 'utf8')\n")
-                    .append("    .trim().split('\\n').join(' ').split(' ');\n");
         }
+        String outputType = javaTypeMap.get(output.get("type").asText());
+
+        String functionCall = String.format("%s result = %s.%s(%s);", outputType, problemName, functionName, paramList.substring(0,paramList.length()-1));
+
+        String outputWrite = "System.out.println(result);";
 
         return String.format(
-                "##USER_CODE_HERE##\n" +
-                        "const input = require('fs').readFileSync('/dev/problems/%s/tests/inputs/##INPUT_FILE_INDEX##.txt', 'utf8').trim().split('\\n').join(' ').split(' ');\n" +
-                        "const %s = input.splice(0, input.length).map(Number);\n" +
-                        "const result = %s(%s);\n" +
-                        "console.log(result);\n",
-                functionName, inputs.get(0).get("name").asText(), functionName, inputs.get(0).get("name").asText()
+                """
+                        import java.io.*;
+                        import java.util.*;
+
+                        public class Solution {
+
+                            public static void main(String[] args) {
+                                String filePath = "/dev/stdin";
+                                List<String> lines = readLinesFromFile(filePath);
+                                %s
+                                %s
+                                %s
+                            }
+                            public static List<String> readLinesFromFile(String filePath) {
+                                List<String> lines = new ArrayList<>();
+                                try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+                                    String line;
+                                    while ((line = br.readLine()) != null) {
+                                        lines.add(line);
+                                    }
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                return lines;
+                            }
+                        }
+                        ##USER_CODE_HERE##
+                        """,
+                inputReads, functionCall, outputWrite
         );
-    }
-
-//    private String generateCRunner(String functionName, JsonNode inputs, JsonNode output) {
-//
-//    }
-
-    private static void saveToFile(String fileName, String content) {
-        System.out.println("Saving to file: " + fileName);
-        try (FileWriter fileWriter = new FileWriter(fileName)) {
-            fileWriter.write(content);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+   }
 }
