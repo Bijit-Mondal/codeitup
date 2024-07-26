@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -73,11 +72,12 @@ public class Generate {
 
             // Generate full-Runner code
             String javaRunner = generateJavaRunner(problemName, functionName, inputs, output);
-
+            String jsRunner = generateJSRunner(functionName, inputs, output);
             Path runnerDir = structureFilePath.getParent().resolve("runner");
             Files.createDirectories(runnerDir);
 
             saveToFile(runnerDir.resolve("Solution.java").toString(), javaRunner);
+            saveToFile(runnerDir.resolve("Solution.js").toString(),jsRunner);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -160,4 +160,119 @@ public class Generate {
                 inputReads, functionCall, outputWrite
         );
    }
+    private String generateJSRunner(String functionName, JsonNode inputs, JsonNode output) {
+        StringBuilder inputReads = new StringBuilder();
+        int inputReadIndex = 0;
+        StringBuilder paramList = new StringBuilder();
+        for(JsonNode input:inputs){
+            paramList.append(String.format("%s,",input.get("name").asText()));
+            if (input.get("type").asText().startsWith("list<")) {
+                inputReads.append(String.format("""
+                    const size_%s = parseInt(lines[%d].trim());
+                    const %s = lines[%d].split(" ").map(Number);
+                    """,
+                        input.get("name").asText(),
+                        inputReadIndex++,
+                        input.get("name").asText(),
+                        inputReadIndex++
+                ));
+            } else {
+                inputReads.append(String.format("""
+                    const %s = parseInt(lines[%d].trim());
+                    """,
+                        input.get("name").asText(),
+                        inputReadIndex++
+                ));
+            }
+        }
+
+        String functionCall = String.format("const result = %s(%s);", functionName, paramList.substring(0,paramList.length()-1));
+
+        String outputWrite = "console.log(result);";
+
+        return String.format(
+                """
+                        const fs = require('fs');
+                        const path = require('path');
+
+                        const filePath = path.join(__dirname, 'input.txt');
+                        const lines = fs.readFileSync(filePath, 'utf-8').trim().split('\\n');
+
+                        %s
+                        %s
+                        %s
+                        ##USER_CODE_HERE##
+                        """,
+                inputReads, functionCall, outputWrite
+        );
+    }
+    private String generateCRunner(String problemName, String functionName, JsonNode inputs, JsonNode output) {
+        StringBuilder inputReads = new StringBuilder();
+        int inputReadIndex = 0;
+        StringBuilder paramList = new StringBuilder();
+
+        for (JsonNode input : inputs) {
+            paramList.append(String.format("%s,", input.get("name").asText()));
+            if (input.get("type").asText().startsWith("list<")) {
+                String type = input.get("type").asText().substring(5, input.get("type").asText().length() - 1);
+                String cType = cTypeMap.get("list<" + type + ">");
+
+                inputReads.append(String.format("""
+                int size_%s;
+                scanf("\\%d", &size_%s);
+                %s %s = (%s*)malloc(size_%s * sizeof(%s));
+                for (int i = 0; i < size_%s; i++) {
+                    scanf("\\%d", &%s[i]);
+                }
+                """,
+
+                        input.get("name").asText(),
+                        input.get("name").asText(),
+                        cType,
+                        input.get("name").asText(),
+                        cType,
+                        input.get("name").asText(),
+                        cType,
+                        input.get("name").asText(),
+                        input.get("name").asText()
+                ));
+            } else {
+                inputReads.append(String.format("""
+                %s %s;
+                scanf("%%d", &%s);
+                """,
+                        cTypeMap.get(input.get("type").asText()),
+                        input.get("name").asText(),
+                        input.get("name").asText()
+                ));
+            }
+        }
+
+        String outputType = cTypeMap.get(output.get("type").asText());
+        String functionCall = String.format("%s result = %s(%s);", outputType, functionName, paramList.substring(0, paramList.length() - 1));
+
+        String outputWrite = "printf(\"%%d\\n\", result);";
+
+        return String.format(
+                """
+                #include <stdio.h>
+                #include <stdlib.h>
+    
+                %s
+    
+                int main() {
+                    %s
+                    %s
+                    %s
+                    return 0;
+                }
+    
+                """,
+                "#include <stdio.h>",
+                inputReads,
+                functionCall,
+                outputWrite
+        );
+    }
+
 }
