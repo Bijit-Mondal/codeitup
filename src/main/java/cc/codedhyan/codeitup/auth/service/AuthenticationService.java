@@ -1,11 +1,10 @@
 package cc.codedhyan.codeitup.auth.service;
 
-import cc.codedhyan.codeitup.auth.AuthenticationRequest;
-import cc.codedhyan.codeitup.auth.AuthenticationResponse;
-import cc.codedhyan.codeitup.auth.OTPRequest;
-import cc.codedhyan.codeitup.auth.RegisterRequest;
+import cc.codedhyan.codeitup.auth.*;
 import cc.codedhyan.codeitup.config.JWTService;
 import cc.codedhyan.codeitup.mail.service.MailService;
+import cc.codedhyan.codeitup.token.model.Token;
+import cc.codedhyan.codeitup.token.model.TokenType;
 import cc.codedhyan.codeitup.token.repo.TokenRepository;
 import cc.codedhyan.codeitup.user.model.Role;
 import cc.codedhyan.codeitup.user.model.User;
@@ -14,17 +13,17 @@ import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
-import java.security.SecureRandom;
 
 
 @Service
@@ -43,6 +42,7 @@ public class AuthenticationService implements Serializable {
 
     private final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
 
+
     public static class UserAlreadyExistsException extends RuntimeException {
         public UserAlreadyExistsException(String message) {
             super(message);
@@ -58,11 +58,11 @@ public class AuthenticationService implements Serializable {
     public void register(
             RegisterRequest request
     )throws MessagingException, UserAlreadyExistsException {
-        if(userRepository.existsByEmail(request.getEmail())){
-            throw new UserAlreadyExistsException("Email already exists");
-        }
         if(userRepository.existsByProfile(request.getProfileName())){
             throw new UserAlreadyExistsException("Profile name already exists");
+        }
+        if(userRepository.existsByEmail(request.getEmail())){
+            throw new UserAlreadyExistsException("Email already exists");
         }
         var user = User.builder()
                 .email(request.getEmail())
@@ -73,6 +73,59 @@ public class AuthenticationService implements Serializable {
                 .role(Role.USER)
                 .build();
         userRepository.save(user);
+        sendValidationEmail(user);
+    }
+
+    public AuthenticationResponse authenticate(
+            AuthenticationRequest request
+    ) throws BadCredentialsException {
+        try{
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
+            );
+        }catch (AuthenticationException e){
+            throw new BadCredentialsException("Invalid email/password or maybe email is not verified");
+        }
+
+        var user = userRepository.getByEmail(request.getEmail());
+        var jwtToken = jwtService.generateToken(user);
+        var refreshToken = jwtService.generateRefreshToken(user);
+        revokeAllUserTokens(user);
+        saveUserToken(user, jwtToken);
+        return AuthenticationResponse.builder()
+                .accessToken(jwtToken)
+                .refreshToken(refreshToken)
+                .build();
+    }
+
+    private void saveUserToken(User user, String jwtToken) {
+        var token = Token.builder()
+                .user(user)
+                .token(jwtToken)
+                .tokenType(TokenType.BEARER)
+                .expired(false)
+                .revoked(false)
+                .build();
+        tokenRepository.save(token);
+    }
+
+    private void revokeAllUserTokens(User user) {
+        var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getUser_id());
+        if (validUserTokens.isEmpty())
+            return;
+        validUserTokens.forEach(token -> {
+            token.setExpired(true);
+            token.setRevoked(true);
+        });
+        tokenRepository.saveAll(validUserTokens);
+    }
+    
+    public void sentOTP(GetOTPRequest request) throws MessagingException {
+        var user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new UsernameNotFoundException("User with email not found"));
         sendValidationEmail(user);
     }
 
@@ -93,6 +146,8 @@ public class AuthenticationService implements Serializable {
         user.setVerified(true);
         userRepository.save(user);
     }
+
+
 
 
     private void sendValidationEmail(User user) throws MessagingException {

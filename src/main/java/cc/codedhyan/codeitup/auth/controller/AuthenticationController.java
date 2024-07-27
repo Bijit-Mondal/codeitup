@@ -1,5 +1,7 @@
 package cc.codedhyan.codeitup.auth.controller;
 
+import cc.codedhyan.codeitup.auth.AuthenticationRequest;
+import cc.codedhyan.codeitup.auth.GetOTPRequest;
 import cc.codedhyan.codeitup.auth.OTPRequest;
 import cc.codedhyan.codeitup.auth.RegisterRequest;
 import cc.codedhyan.codeitup.auth.service.AuthenticationService;
@@ -10,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -25,13 +29,44 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<?> register(
         @RequestBody @Valid RegisterRequest request
-    ) throws MessagingException, IOException {
+    ) throws IOException {
         try{
             authenticationService.register(request);
             return ResponseEntity.accepted().build();
         } catch (AuthenticationService.UserAlreadyExistsException e) {
             logger.error("User already exists", e);
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        } catch (MessagingException e) {
+            logger.error("Error sending mail", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(
+            @RequestBody @Valid AuthenticationRequest request
+    ) {
+        try{
+            return ResponseEntity.ok(authenticationService.authenticate(request));
+        } catch ( BadCredentialsException e) {
+            logger.error("Bad credentials", e);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/sent-otp")
+    public ResponseEntity<?> sentOTP(
+            @RequestBody @Valid GetOTPRequest request
+    ) {
+        try{
+            authenticationService.sentOTP(request);
+            return ResponseEntity.accepted().build();
+        } catch ( UsernameNotFoundException e) {
+            logger.error("Bad credentials", e);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        } catch (MessagingException e) {
+            logger.error("Error sending mail", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
