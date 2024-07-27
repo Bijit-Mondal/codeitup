@@ -36,6 +36,7 @@ public class User implements UserDetails {
 
     @JsonIgnore
     private boolean isVerified;
+
     @JsonIgnore
     @Enumerated(EnumType.STRING)
     private Role role;
