@@ -1,0 +1,42 @@
+@font-face {
+    font-family: 'Fira-Code';
+    src : url('../assets/woff/FiraCode-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Gilroy-Regular';
+    src : url('../assets/woff/Gilroy-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Gilroy-Bold';
+    src : url('../assets/woff/Gilroy-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+
+h1,h2,h3 {
+    font-family: 'Gilroy-Bold', sans-serif;
+}
+
+.vs-button--text{
+    font-family: 'Gilroy-Regular', sans-serif !important;
+    font-weight: bold;
+}
+
+p {
+    font-family: 'Gilroy-Regular', sans-serif;
+}
+
+/*ace editor*/
+.ace_editor, .ace_editor *{
+    font-family: "Fira-Code", monospace !important;
+    font-size: 12px !important;
+    font-weight: 400 !important;
+    letter-spacing: 0 !important;
+
+}
