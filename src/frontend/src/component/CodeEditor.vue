@@ -9,19 +9,27 @@
           <vs-select-item :key="index" :modelValue="item.value" :text="item.text" v-for="item,index in options" />
         </vs-select>
       </vs-col>
+      <vs-col vs-type="flex" vs-justify="center" type="color" color="primary" vs-align="center" vs-lg="2" vs-sm="4">
+        <vs-select
+            class="selectExample"
+            v-model="theme"
+        >
+          <vs-select-item :key="index" :modelValue="item.value" :text="item.text" v-for="item,index in themes" />
+        </vs-select>
+      </vs-col>
     </vs-row>
     <div class="code-editor__ace">
       <v-ace-editor
           v-model:value="content"
           lang="java"
-          theme="dracula"
+          :theme="theme"
           style="height: 100%; width: 100%; margin: 0.02rem; border-radius: 5px"
       />
     </div>
     <div class="code-editor__submit">
       <vs-row vs-type="flex" vs-justify="flex-end" vs-w="12">
         <vs-col vs-type="flex" vs-justify="center" vs-align="center" vs-w="2">
-          <vs-button color="primary" @click="showOnConsole">Submit</vs-button>
+          <vs-button color="primary" type="border" @click="showOnConsole">Submit</vs-button>
         </vs-col>
       </vs-row>
     </div>
@@ -29,13 +37,15 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import {ref, } from "vue";
 import ace from "ace-builds";
 
 import { VAceEditor } from "vue3-ace-editor";
 import "ace-builds/src-noconflict/mode-java"; // Load the language definition file used below
-import "ace-builds/src-noconflict/theme-dracula"; // Load the theme definition file used below
-import "ace-builds/src-noconflict/theme-clouds"; // Load the theme definition file used below
+
+import "ace-builds/src-noconflict/theme-pastel_on_dark";
+import "ace-builds/src-noconflict/theme-clouds"
+import "ace-builds/src-noconflict/theme-dracula"
 
 import snippetsJavaUrl from "file-loader?esModule=false!ace-builds/src-noconflict/snippets/java";
 ace.config.setModuleUrl("ace/snippets/java", snippetsJavaUrl);
@@ -55,6 +65,13 @@ const options = ref([
 ])
 
 const select = ref(options.value[0].text);
+
+const themes = ref([
+  { text: 'Pastel on Dark', value: 'pastel_on_dark', index: 0 },
+  { text: 'Clouds', value: 'clouds', index: 1 },
+  { text: 'Dracula', value: 'dracula', index: 2}
+])
+const theme = ref(themes.value[0].value)
 
 const showOnConsole = () => {
   console.log(content.value);
@@ -116,6 +133,11 @@ const showOnConsole = () => {
   background: var(--primary);
   color: var(--dark) !important;
 
+}
+
+/* vs button active */
+.vs-button-border.isActive .vs-button--icon, .vs-button-border.isActive .vs-button--text, .vs-button-flat.isActive .vs-button--icon, .vs-button-flat.isActive .vs-button--text{
+  color: var(--dark) !important;
 }
 @media (max-width: 550px) {
   .con-select {

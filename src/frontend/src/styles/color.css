@@ -4,6 +4,7 @@
     --dark : rgb(231,231,230);
     --primary: rgb(252, 209, 149);
     --secondary: rgb(95,185,178);
+    --danger: rgb(var(--vs-danger));
     --vs-primary: 255, 196, 87;
     --vs-success: 95 , 185, 178;
     --vs-text: 67,67,67;
@@ -12,10 +13,10 @@
      :root {
         --text: rgb(243, 243, 242);
         --text-disable : rgb(190, 190, 188);
-        --background: rgb(40,42,54);
+        --background: rgb(44,44,40);
         --primary: rgb(252, 209, 149);
         --secondary: rgb(99, 83, 54);
-        --dark: rgb(16, 18, 30);
+        --dark: rgb(23,21,17);
         --danger: rgb(228,121,121);
         --success: rgb(95,185,178);
         --vs-primary: 252, 209, 149;
@@ -36,10 +37,6 @@ svg {
     fill: var(--primary) !important;
 }
 
-:root {
-    --backdrop-image-filter : blur(50px);
-    --vp-home-hero-name-background:-webkit-linear-gradient( 120deg, var(--primary) 50%,  var(--secondary))
-}
 
 .vs-button-filled .vs-button-text {
     color: rgb(var(--vs-text));

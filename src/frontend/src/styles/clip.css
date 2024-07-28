@@ -1,0 +1,22 @@
+:root {
+    --backdrop-image-filter : blur(50px);
+    --vp-home-hero-name-background:-webkit-linear-gradient( 120deg, var(--primary) 50%,  var(--danger)  );
+    --vp-home-hero-codedhyan-background:-webkit-linear-gradient( 120deg, rgb(139, 112, 205) 50%,  rgb(233, 224, 255)  );
+    --vp-home-hero-codeitup-x-codedhyan-background:-webkit-linear-gradient( 120deg, rgb(139, 112, 205) 10%, var(--primary) 80%  );
+}
+.clip_codeitup_x_codedhyan {
+    background: var(--vp-home-hero-codeitup-x-codedhyan-background);
+}
+.clip_codedhyan {
+    background: var(--vp-home-hero-codedhyan-background);
+}
+.clip_codeitup {
+    background: var(--vp-home-hero-name-background);
+}
+
+.clip {
+    -webkit-background-clip: text;
+    backdrop-clip: text;
+    -webkit-text-fill-color: transparent;
+    user-select: none;
+}

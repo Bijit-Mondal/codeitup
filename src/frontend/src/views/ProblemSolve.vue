@@ -1,10 +1,7 @@
 <template>
   <div class="split problem-box">
     <div id="split-0">
-      <h1>Two Sum</h1>
-      <p>Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
-        Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ips
-        Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum </p>
+      <ProblemDefinition/>
     </div>
     <div id="split-1">
       <CodeEditor/>
@@ -13,8 +10,9 @@
 </template>
 <script setup>
 // import { ref } from "vue";
-import CodeEditor from "../component/CodeEditor.vue";
-import { onMounted } from "vue"
+import {defineAsyncComponent, onMounted} from "vue"
+const CodeEditor = defineAsyncComponent(() => import("../component/CodeEditor.vue"))
+const ProblemDefinition = defineAsyncComponent(() => import("../component/ProblemDefinition.vue"))
 import Split from 'split.js'
 onMounted(() => {
   Split(['#split-0', '#split-1'],
@@ -36,7 +34,7 @@ onMounted(() => {
 .split {
   display: flex;
   flex-direction: row;
-  height: calc(100vh - 55px);
+  min-height: calc(100vh - 55px);
 }
 .gutter {
   background-color: var(--text);

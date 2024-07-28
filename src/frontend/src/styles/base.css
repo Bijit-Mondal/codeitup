@@ -13,3 +13,7 @@
 :root {
     --break-point : 768px;
 }
+body {
+    -webkit-tap-highlight-color: transparent;
+    scrollbar-width: none;
+}

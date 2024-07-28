@@ -5,7 +5,9 @@
 
       <template #title>
         <vs-navbar-title>
-          CodeitUp
+          <span class="clip_codedhyan clip">CodeDhyan</span>
+          <span class="clip_codeitup_x_codedhyan clip"> X </span>
+          <span class="clip_codeitup clip">CodeitUp</span>
         </vs-navbar-title>
       </template>
 
@@ -22,6 +24,7 @@
   </div>
 </template>
 <style>
+@import "../../styles/clip.css";
 .nabarx{
  background-color: var(--dark) !important;
 }
