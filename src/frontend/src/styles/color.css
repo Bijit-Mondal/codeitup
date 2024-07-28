@@ -1,6 +1,7 @@
 :root{
     --text: rgb(4, 3, 22);
     --background: rgb(244, 243, 242);
+    --dark : rgb(231,231,230);
     --primary: rgb(252, 209, 149);
     --secondary: rgb(95,185,178);
     --vs-primary: 255, 196, 87;
@@ -10,11 +11,13 @@
 @media (prefers-color-scheme: dark) {
      :root {
         --text: rgb(243, 243, 242);
-        --background: rgb(30,43,51);
+        --text-disable : rgb(190, 190, 188);
+        --background: rgb(40,42,54);
         --primary: rgb(252, 209, 149);
         --secondary: rgb(99, 83, 54);
-        --dark: rgb(44,80,82);
+        --dark: rgb(16, 18, 30);
         --danger: rgb(228,121,121);
+        --success: rgb(95,185,178);
         --vs-primary: 252, 209, 149;
         --vs-danger: 228,121,121;
         --vs-dark: 1, 1, 4;

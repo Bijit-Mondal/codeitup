@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "material-icons": "^1.13.12",
     "split.js": "^1.6.5"
   }
 }

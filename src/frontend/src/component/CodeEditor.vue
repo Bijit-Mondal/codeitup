@@ -1,11 +1,31 @@
 <template>
-  <v-ace-editor
-      v-model:value="content"
-      lang="java"
-      theme="dracula"
-      style="height: calc(100vh - 40px); width: calc(100% - 2px); margin: 0.02rem; border-radius: 1px"
-  />
-  <vs-button color="primary" @click="showOnConsole">Danger</vs-button>
+  <div class="code-editor">
+    <vs-row vs-type="flex" vs-justify="space-between" vs-w="12" class="code-editor__config">
+      <vs-col vs-type="flex" vs-justify="center" type="color" color="primary" vs-align="center" vs-lg="2" vs-sm="4">
+        <vs-select
+            class="selectExample"
+            v-model="select"
+        >
+          <vs-select-item :key="index" :modelValue="item.value" :text="item.text" v-for="item,index in options" />
+        </vs-select>
+      </vs-col>
+    </vs-row>
+    <div class="code-editor__ace">
+      <v-ace-editor
+          v-model:value="content"
+          lang="java"
+          theme="dracula"
+          style="height: 100%; width: 100%; margin: 0.02rem; border-radius: 5px"
+      />
+    </div>
+    <div class="code-editor__submit">
+      <vs-row vs-type="flex" vs-justify="flex-end" vs-w="12">
+        <vs-col vs-type="flex" vs-justify="center" vs-align="center" vs-w="2">
+          <vs-button color="primary" @click="showOnConsole">Submit</vs-button>
+        </vs-col>
+      </vs-row>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -28,16 +48,82 @@ const content = ref(
 }`
 );
 
+const options = ref([
+  {text:'Java',value:0},
+  {text:'C++',value:2},
+  {text:'JavaScript',value:3},
+])
+
+const select = ref(options.value[0].text);
+
 const showOnConsole = () => {
   console.log(content.value);
 };
 </script>
 
+<style scoped>
+.code-editor > .code-editor__submit {
+  margin-top: 1rem;
+}
+.code-editor > .code-editor__config {
+  margin-bottom: 0.5rem;
+}
+.code-editor > .code-editor__ace {
+  height: 62vh;
+}
+</style>
+
 <style>
-.ace_gutter{
-  width: 0em !important;
+.ace_content {
+  padding-top: 0.8rem;
 }
-.ace_scroller{
-  left: 0px !important;
+.ace_gutter {
+  padding-top: 0.8rem;
 }
+.code-editor {
+  padding: 0 0 0 0.4rem;
+}
+@media (max-width: 768px) {
+  .code-editor {
+    padding: 0.4rem 0 0 0;
+  }
+}
+/* vs-select menu */
+.vs-select--input {
+  color: var(--text);
+  background-color: var(--background);
+}
+.con-select {
+  width: 130px;
+}
+
+.con-select-example {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.con-select .vs-select {
+  width: 100%
+}
+.vs-select--options {
+  background: var(--background) !important;
+}
+.vs-select--item {
+  color: var(--text) !important;
+  border: 0 !important;
+}
+.vs-select--item:focus, .vs-select--item:hover {
+  background: var(--primary);
+  color: var(--dark) !important;
+
+}
+@media (max-width: 550px) {
+  .con-select {
+    flex-direction: column;
+  }
+  .con-select .vs-select {
+    width: 100%
+  }
+}
+
 </style>

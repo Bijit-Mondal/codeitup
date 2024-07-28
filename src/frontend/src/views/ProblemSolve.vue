@@ -1,5 +1,5 @@
 <template>
-  <div class="split">
+  <div class="split problem-box">
     <div id="split-0">
       <h1>Two Sum</h1>
       <p>Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
@@ -21,26 +21,40 @@ onMounted(() => {
       {
         minSize: [40,300],
         snapOffset: 20,
-        gutterSize: 5,
-
+        gutterSize: 1,
       })
 })
 
 </script>
 <style>
+.problem-box {
+  margin: 0.5rem;
+  background-color: var(--dark);
+  border-radius: 5px;
+  padding: 0.8rem 0.7rem;
+}
 .split {
-  margin-top: 30px;
   display: flex;
   flex-direction: row;
+  height: calc(100vh - 55px);
 }
 .gutter {
-  background-color: #eee;
+  background-color: var(--text);
   background-repeat: no-repeat;
-  background-position: 50%;
+  background-position: 5%;
+  border-radius: 10px;
 }
 
 .gutter.gutter-horizontal {
   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
   cursor: col-resize;
+}
+@media (max-width: 768px) {
+  .split {
+    flex-direction: column;
+  }
+  #split-0, #split-1 {
+    width: 100% !important;
+  }
 }
 </style>
