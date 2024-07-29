@@ -12,13 +12,16 @@
       </template>
 
       <vs-navbar-item index="0">
-        <a href="#">Home</a>
+        <router-link :to="{ name:'home' }">Home</router-link>
       </vs-navbar-item>
       <vs-navbar-item index="1">
-        <a href="#">News</a>
+        <router-link :to="{ name:'problem' }">Problems</router-link>
       </vs-navbar-item>
       <vs-navbar-item index="2">
-        <a href="#">Update</a>
+        <a href="#">Contest</a>
+      </vs-navbar-item>
+      <vs-navbar-item index="3">
+        <a href="#">Login</a>
       </vs-navbar-item>
     </vs-navbar>
   </div>

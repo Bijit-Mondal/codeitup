@@ -1,28 +1,30 @@
 :root{
-    --text: rgb(4, 3, 22);
-    --background: rgb(244, 243, 242);
-    --dark : rgb(231,231,230);
-    --primary: rgb(252, 209, 149);
-    --secondary: rgb(95,185,178);
-    --danger: rgb(var(--vs-danger));
     --vs-primary: 255, 196, 87;
     --vs-success: 95 , 185, 178;
     --vs-text: 67,67,67;
+    --vs-warning: 252, 232, 209;
+    --vs-dark: 244, 243, 242;
+    --text: rgb(4, 3, 22);
+    --text-disable: rgba(4, 3, 22,0.5);
+    --background: rgb(var(--vs-dark));
+    --dark : rgb(231,231,230);
+    --primary: rgb(var(--vs-primary));
+    --danger: rgb(var(--vs-danger));
 }
 @media (prefers-color-scheme: dark) {
      :root {
+         --vs-primary: 252, 209, 149;
+         --vs-danger: 228,121,121;
+         --vs-dark: 44,44,40;
+         --vs-success: 95,185,178;
+         --vs-warning: 61, 60, 53;
         --text: rgb(243, 243, 242);
         --text-disable : rgb(190, 190, 188);
-        --background: rgb(44,44,40);
-        --primary: rgb(252, 209, 149);
-        --secondary: rgb(99, 83, 54);
+        --background: rgb(var(--vs-dark));
+        --primary: rgb(var(--vs-primary));
         --dark: rgb(23,21,17);
-        --danger: rgb(228,121,121);
-        --success: rgb(95,185,178);
-        --vs-primary: 252, 209, 149;
-        --vs-danger: 228,121,121;
-        --vs-dark: 1, 1, 4;
-        --vs-success: 95,185,178;
+        --danger: rgb(var(--vs-danger));
+        --success: rgb(var(--vs-success));
     }
  }
 
@@ -45,4 +47,9 @@ svg {
     .vs-button-filled .vs-button-text {
         color: var(--background);
     }
+}
+
+/* skeleton loading color change */
+.skeleton-loading {
+    background-color: rgba(var(--vs-dark,0.1)) !important;
 }

@@ -1,4 +1,4 @@
-# gfg-practice-clone
+# Codeitup
 
 ## Project setup
 ```

@@ -1,6 +1,7 @@
 .DS_Store
 node_modules
-/dist
+**/src/frontend/node_modules
+**/src/frontend/dist
 
 
 # local env files
@@ -27,7 +28,7 @@ pnpm-debug.log*
 *.sw?
 
 HELP.md
-target/
+/target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/

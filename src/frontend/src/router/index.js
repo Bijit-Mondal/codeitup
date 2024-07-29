@@ -1,11 +1,26 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import ProblemSolve from '../views/ProblemSolve'
+import HomeView from '../views/HomeView'
 
 const routes = [
   {
     path: '/',
-    name: 'problem-solve',
-    component: ProblemSolve
+    name: 'home',
+    component: HomeView
+  },
+  {
+    path: "/problems",
+    children: [
+      {
+        path: '',
+        name: 'problem',
+        component: () => import("../views/Problem/ProblemList")
+      },
+      {
+        path: 'id/:slug',
+        name: 'problem-solve',
+        component: () => import("../views/Problem/ProblemSolve")
+      }
+    ]
   },
   // {
   //   path: '/about',

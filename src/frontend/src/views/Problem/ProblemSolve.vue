@@ -11,8 +11,8 @@
 <script setup>
 // import { ref } from "vue";
 import {defineAsyncComponent, onMounted} from "vue"
-const CodeEditor = defineAsyncComponent(() => import("../component/CodeEditor.vue"))
-const ProblemDefinition = defineAsyncComponent(() => import("../component/ProblemDefinition.vue"))
+const CodeEditor = defineAsyncComponent(() => import("../../component/CodeEditor.vue"))
+const ProblemDefinition = defineAsyncComponent(() => import("../../component/ProblemDefinition.vue"))
 import Split from 'split.js'
 onMounted(() => {
   Split(['#split-0', '#split-1'],

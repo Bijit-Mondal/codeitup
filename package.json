@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "material-icons": "^1.13.12",
+    "@brayamvalero/vue3-skeleton": "^0.0.32",
     "split.js": "^1.6.5"
   }
 }

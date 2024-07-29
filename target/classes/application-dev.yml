@@ -29,6 +29,9 @@ spring:
 
 application:
   security:
+    rapidapi:
+      key: d2f1c0383amshccab8a5243218b4p19de7fjsn4f0e22a3bc14
+      host: 'judge0-ce.p.rapidapi.com'
     jwt:
       secret-key: mokg97dd5d590fd9531e09fa089f10ff1436efdc60f8c9f3331c26ab32006c33
       expiration: 86400000 # a day
