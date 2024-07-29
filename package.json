@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "@brayamvalero/vue3-skeleton": "^0.0.32",
-    "split.js": "^1.6.5"
-  }
-}
