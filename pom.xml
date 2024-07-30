@@ -85,6 +85,15 @@
 			<artifactId>caffeine</artifactId>
 		</dependency>
 
+		<!-- Git -->
+		<!-- https://mvnrepository.com/artifact/org.eclipse.jgit/org.eclipse.jgit -->
+		<dependency>
+			<groupId>org.eclipse.jgit</groupId>
+			<artifactId>org.eclipse.jgit</artifactId>
+			<version>6.7.0.202309050840-r</version>
+		</dependency>
+
+
 		<!-- Mail and Retry -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -165,7 +174,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>target/classes/static</outputDirectory>
+							<outputDirectory>target/classes/static/</outputDirectory>
 							<resources>
 								<resource>
 									<directory>src/frontend/dist</directory>

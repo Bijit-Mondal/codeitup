@@ -1,5 +1,6 @@
-package cc.codedhyan.codeitup.problem.model;
+package cc.codedhyan.codeitup.contest.model;
 
+import cc.codedhyan.codeitup.problem.model.Problem;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,28 +16,32 @@ import java.time.OffsetDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "_default_codes")
-@IdClass(DefaultCodeId.class)
-public class DefaultCode {
+@Table(name = "_contest_problem")
+@IdClass(ContestProblemId.class)
+public class ContestProblem {
     @Id
-    private Integer languageId;
+    private String contestId;
 
     @Id
     private String problemId;
 
-    private String code;
+    @ManyToOne
+    @JoinColumn(name = "contestId", insertable = false, updatable = false)
+    private Contest contest;
 
     @ManyToOne
     @JoinColumn(name = "problemId", insertable = false, updatable = false)
     private Problem problem;
 
-    @ManyToOne
-    @JoinColumn(name = "languageId", insertable = false, updatable = false)
-    private Language language;
+    private Integer occurrence;
+
+    @Builder.Default
+    private Long solved = 0L;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private OffsetDateTime createdAt;
+
     @UpdateTimestamp
     @Column(nullable = false)
     private OffsetDateTime updatedAt;

@@ -1,15 +1,13 @@
 package cc.codedhyan.codeitup.problem.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.checkerframework.common.reflection.qual.ClassBound;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -30,6 +28,10 @@ public class Language {
 
     @Column(nullable = false)
     private String code;
+
+    @ToString.Exclude
+    @OneToMany(mappedBy = "language",fetch = FetchType.EAGER)
+    private List<DefaultCode> defaultCode;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)

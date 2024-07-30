@@ -1,5 +1,6 @@
 package cc.codedhyan.codeitup.problem.model;
 
+import cc.codedhyan.codeitup.contest.model.ContestProblem;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -21,13 +22,14 @@ public class Problem {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-
     @Column(nullable = false, length = 40)
     private String title;
 
-    // give slug which will be title with space replace with -
     @Column(nullable = false, unique = true)
     private String slug;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String description;
 
     @Enumerated(EnumType.STRING)
     private Difficulty difficulty;
@@ -40,12 +42,18 @@ public class Problem {
 
     @JsonIgnore
     @ToString.Exclude
-    @OneToMany(mappedBy = "problem",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "problem", fetch = FetchType.EAGER)
+    private List<ContestProblem> contests;
+
+    @JsonIgnore
+    @ToString.Exclude
+    @OneToMany(mappedBy = "problem", fetch = FetchType.EAGER)
     private List<DefaultCode> defaultCode;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private OffsetDateTime createdAt;
+
     @UpdateTimestamp
     @Column(nullable = false)
     private OffsetDateTime updatedAt;
