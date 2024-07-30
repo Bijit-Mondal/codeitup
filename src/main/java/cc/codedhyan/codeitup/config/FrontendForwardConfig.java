@@ -7,7 +7,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 @Slf4j
 public class FrontendForwardConfig {
-    @GetMapping({"/app","/"})
+
+//    TODO
+//    Better regex needed
+
+    @GetMapping({ "/app","/app/","/app/problems/**","/app/problems"})
     public String forward() {
         log.info("Forwarding to /app");
         return "forward:/app/index.html";
