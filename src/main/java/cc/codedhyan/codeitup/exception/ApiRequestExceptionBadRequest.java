@@ -1,13 +1,13 @@
 package cc.codedhyan.codeitup.exception;
 
 
-public class ApiRequestException extends RuntimeException {
+public class ApiRequestExceptionBadRequest extends RuntimeException {
 
-        public ApiRequestException(String message) {
+        public ApiRequestExceptionBadRequest(String message) {
             super(message);
         }
 
-        public ApiRequestException(String message, Throwable cause) {
+        public ApiRequestExceptionBadRequest(String message, Throwable cause) {
             super(message, cause);
         }
 }

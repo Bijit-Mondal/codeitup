@@ -1,11 +1,11 @@
 package cc.codedhyan.codeitup.exception;
 
-public class ApiRequestExceptionConflictRequest extends RuntimeException{
-        public ApiRequestExceptionConflictRequest(String message) {
+public class ApiRequestExceptionConflict extends RuntimeException{
+        public ApiRequestExceptionConflict(String message) {
             super(message);
         }
 
-        public ApiRequestExceptionConflictRequest(String message, Throwable cause) {
+        public ApiRequestExceptionConflict(String message, Throwable cause) {
             super(message, cause);
         }
 }

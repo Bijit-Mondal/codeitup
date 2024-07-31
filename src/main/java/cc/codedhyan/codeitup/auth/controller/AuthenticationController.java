@@ -5,6 +5,9 @@ import cc.codedhyan.codeitup.auth.GetOTPRequest;
 import cc.codedhyan.codeitup.auth.OTPRequest;
 import cc.codedhyan.codeitup.auth.RegisterRequest;
 import cc.codedhyan.codeitup.auth.service.AuthenticationService;
+import cc.codedhyan.codeitup.exception.ApiInternalServerErrorException;
+import cc.codedhyan.codeitup.exception.ApiRequestExceptionBadRequest;
+import cc.codedhyan.codeitup.exception.ApiRequestExceptionConflict;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,16 +32,16 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<?> register(
         @RequestBody @Valid RegisterRequest request
-    ) throws IOException {
+    ){
         try{
             authenticationService.register(request);
             return ResponseEntity.accepted().build();
         } catch (AuthenticationService.UserAlreadyExistsException e) {
             logger.error("User already exists", e);
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+            throw new ApiRequestExceptionConflict(e.getMessage(),e);
         } catch (MessagingException e) {
             logger.error("Error sending mail", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            throw new ApiInternalServerErrorException(e.getMessage(),e);
         }
     }
 
