@@ -1,5 +1,15 @@
 <template>
   <div class="login-box">
+    <div v-if="isError">
+      <vs-alert active="true" color="danger">
+        {{ error }}
+      </vs-alert>
+    </div>
+    <div v-if="isSuccess">
+      <vs-alert active="true" color="success">
+        {{  data }}
+      </vs-alert>
+    </div>
     <form @submit.prevent="submitForm">
       <vs-input
           v-for="(input, index) in inputs"
@@ -10,6 +20,7 @@
           :placeholder="input.placeholder"
           :icon="input.icon"
           :type="input.type"
+          :disabled="isPending"
           v-model="auth[input.field]"
           @blur="v$[input.field].$touch()"
       />
@@ -21,14 +32,21 @@
 
 
 <script setup>
+/* eslint-disable */
 import { reactive, ref } from 'vue';
 
 import { registerValidation } from '@/lib/vuelidate/validate.syntax';
 import useVuelidate from '@vuelidate/core';
 
+import { authQueries } from '@/lib/tanstack/auth.queries';
+
+const { registerMutation } = authQueries();
+
+const { mutateAsync: register, isError, isPending, isSuccess, data, error } = registerMutation();
+
 const auth = reactive({
   name: '',
-  username: '',
+  profileName: '',
   email: '',
   password: ''
 });
@@ -38,7 +56,7 @@ const v$ = useVuelidate(registerValidation, auth);
 
 const inputs = ref([
   { placeholder: "Enter your full name", icon: "person", type: "text", field: "name" },
-  { placeholder: "Enter your username", icon: "face", type: "text", field: "username" },
+  { placeholder: "Enter your username", icon: "face", type: "text", field: "profileName" },
   { placeholder: "Enter your email address", icon: "mail", type: "email", field: "email" },
   { placeholder: "Enter your password", icon: "lock", type: "password", field: "password" }
 ]);
@@ -51,9 +69,8 @@ const submitForm = () => {
     console.log('Form is invalid');
     return;
   }
-
   console.log('Form is valid');
-  console.log(auth);
+  register(auth);
 };
 
 </script>
