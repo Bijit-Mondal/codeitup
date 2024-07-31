@@ -8,17 +8,22 @@ const routes = [
     component: HomeView
   },
   {
+    path: '/auth',
+    name: 'auth',
+    component: () => import("../views/auth/AuthView")
+  },
+  {
     path: "/problems",
     children: [
       {
         path: '',
         name: 'problem',
-        component: () => import("../views/Problem/ProblemList")
+        component: () => import("../views/problem/ProblemList")
       },
       {
         path: 'id/:slug',
         name: 'problem-solve',
-        component: () => import("../views/Problem/ProblemSolve")
+        component: () => import("../views/problem/ProblemSolve")
       }
     ]
   },

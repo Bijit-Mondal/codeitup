@@ -1,6 +1,7 @@
 package cc.codedhyan.codeitup.problem.model;
 
 import cc.codedhyan.codeitup.contest.model.ContestProblem;
+import cc.codedhyan.codeitup.contest.model.ContestSubmission;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,6 +32,9 @@ public class Problem {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
 
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String testCases;
+
     @Enumerated(EnumType.STRING)
     private Difficulty difficulty;
 
@@ -40,12 +44,21 @@ public class Problem {
     @Builder.Default
     private Long solved = 0L;
 
+    private String solutionGist;
+
+    private String solutionTutorial;
+
     @JsonIgnore
     @ToString.Exclude
     @OneToMany(mappedBy = "problem", fetch = FetchType.EAGER)
     private List<ContestProblem> contests;
 
-    @JsonIgnore
+    @OneToMany(mappedBy = "problem", fetch = FetchType.EAGER)
+    private List<ContestSubmission> tags;
+
+    @OneToMany(mappedBy = "problem", fetch = FetchType.EAGER)
+    private List<Submission> submissions;
+
     @ToString.Exclude
     @OneToMany(mappedBy = "problem", fetch = FetchType.EAGER)
     private List<DefaultCode> defaultCode;

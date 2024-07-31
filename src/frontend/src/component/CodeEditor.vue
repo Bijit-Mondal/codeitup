@@ -5,7 +5,6 @@
         <vs-select
             class="selectExample"
             v-model="select"
-            icon-pack="feather"
         >
           <vs-select-item :key="index" :modelValue="item.value" :text="item.text" v-for="item,index in options" />
         </vs-select>
@@ -14,7 +13,6 @@
         <vs-select
             class="selectExample"
             v-model="theme"
-            icon-pack="feather"
         >
           <vs-select-item :key="index" :modelValue="item.value" :text="item.text" v-for="item,index in themes" />
         </vs-select>

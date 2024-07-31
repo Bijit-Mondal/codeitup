@@ -43,6 +43,7 @@ svg {
 .vs-button-filled .vs-button-text {
     color: rgb(var(--vs-text));
 }
+
 @media (prefers-color-scheme: dark) {
     .vs-button-filled .vs-button-text {
         color: var(--background);

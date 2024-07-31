@@ -18,10 +18,10 @@
         <router-link :to="{ name:'problem' }">Problems</router-link>
       </vs-navbar-item>
       <vs-navbar-item index="2">
-        <a href="#">Contest</a>
+        <router-link :to="{ name:'auth' }">Contest</router-link>
       </vs-navbar-item>
       <vs-navbar-item index="3">
-        <a href="#">Login</a>
+        <router-link :to="{ name:'auth' }">Login</router-link>
       </vs-navbar-item>
     </vs-navbar>
   </div>

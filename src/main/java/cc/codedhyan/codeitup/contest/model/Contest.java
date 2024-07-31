@@ -42,6 +42,9 @@ public class Contest {
     @OneToMany(mappedBy = "contest", fetch = FetchType.EAGER)
     private List<ContestProblem> problems;
 
+    @OneToMany(mappedBy = "contest", fetch = FetchType.EAGER)
+    private List<ContestSubmission> submissions;
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private OffsetDateTime createdAt;

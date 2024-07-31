@@ -1,5 +1,7 @@
 package cc.codedhyan.codeitup.user.model;
 
+import cc.codedhyan.codeitup.contest.model.ContestSubmission;
+import cc.codedhyan.codeitup.problem.model.Submission;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.OffsetDateTime;
 import java.util.Collection;
+import java.util.List;
 
 @Data
 @Builder
@@ -40,6 +43,12 @@ public class User implements UserDetails {
     @JsonIgnore
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private List<ContestSubmission> contestSubmissions;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private List<Submission> submissions;
 
 
     @CreationTimestamp
