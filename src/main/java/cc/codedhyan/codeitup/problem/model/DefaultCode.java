@@ -1,5 +1,6 @@
 package cc.codedhyan.codeitup.problem.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,9 +29,11 @@ public class DefaultCode {
 
     @ManyToOne
     @JoinColumn(name = "problemId", insertable = false, updatable = false)
+    @JsonIgnore
     private Problem problem;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "languageId", insertable = false, updatable = false)
     private Language language;
 

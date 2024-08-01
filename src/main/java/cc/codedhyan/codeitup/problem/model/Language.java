@@ -1,5 +1,6 @@
 package cc.codedhyan.codeitup.problem.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.checkerframework.common.reflection.qual.ClassBound;
@@ -26,10 +27,8 @@ public class Language {
     @Column(unique = true, nullable = false)
     private Integer judge0id;
 
-    @Column(nullable = false)
-    private String code;
-
     @ToString.Exclude
+    @JsonIgnore
     @OneToMany(mappedBy = "language",fetch = FetchType.EAGER)
     private List<DefaultCode> defaultCode;
 
@@ -39,5 +38,4 @@ public class Language {
     @UpdateTimestamp
     @Column(nullable = false)
     private OffsetDateTime updatedAt;
-
 }

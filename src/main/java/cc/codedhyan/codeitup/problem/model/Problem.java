@@ -39,7 +39,7 @@ public class Problem {
     private Difficulty difficulty;
 
     @Builder.Default
-    private Boolean hidden = false;
+    private Boolean hidden = true;
 
     @Builder.Default
     private Long solved = 0L;
@@ -53,9 +53,11 @@ public class Problem {
     @OneToMany(mappedBy = "problem", fetch = FetchType.EAGER)
     private List<ContestProblem> contests;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "problem", fetch = FetchType.EAGER)
     private List<ContestSubmission> tags;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "problem", fetch = FetchType.EAGER)
     private List<Submission> submissions;
 

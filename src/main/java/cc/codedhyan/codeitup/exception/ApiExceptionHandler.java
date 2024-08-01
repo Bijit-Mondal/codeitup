@@ -53,4 +53,15 @@ public class ApiExceptionHandler {
                 .build();
         return new ResponseEntity<>(apiException, HttpStatus.UNAUTHORIZED);
     }
+
+    @ExceptionHandler(value = { ApiRequestExceptionNotFound.class })
+    public ResponseEntity<Object> handleNotFoundException(ApiRequestExceptionNotFound e) {
+        ApiException apiException =  ApiException.builder()
+                .message(e.getMessage())
+                .httpStatus(HttpStatus.NOT_FOUND)
+                .throwable(e)
+                .timestamp(ZonedDateTime.now())
+                .build();
+        return new ResponseEntity<>(apiException, HttpStatus.NOT_FOUND);
+    }
 }
