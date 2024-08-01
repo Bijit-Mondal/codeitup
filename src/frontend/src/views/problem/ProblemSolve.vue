@@ -19,7 +19,7 @@ onMounted(() => {
       {
         minSize: [40,300],
         snapOffset: 20,
-        gutterSize: 1,
+        gutterSize: 4,
       })
 })
 
@@ -37,10 +37,14 @@ onMounted(() => {
   min-height: calc(100vh - 55px);
 }
 .gutter {
-  background-color: var(--text);
+  background-color: var(--dark);
   background-repeat: no-repeat;
   background-position: 5%;
   border-radius: 10px;
+  transition: background-color 0.2s;
+  &:hover {
+    background-color: var(--background);
+  }
 }
 
 .gutter.gutter-horizontal {

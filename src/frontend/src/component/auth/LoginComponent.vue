@@ -1,39 +1,81 @@
 <template>
   <div class="login-box">
-    <div>
+    <form @submit.prevent="submitForm">
       <vs-input
           v-for="(input, index) in inputs"
           :key="index"
           class="login-box__input"
+          :danger="v$[input.field].$error"
+          :danger-text="v$[input.field].$errors[0]?.$message"
+          val-icon-danger="error"
           :placeholder="input.placeholder"
           :icon="input.icon"
           :type="input.type"
-          v-model="input.value"
+          v-model="auth[input.field]"
+          @blur="v$[input.field].$touch()"
       />
-
-      <vs-button color="primary" type="filled">Login</vs-button>
-    </div>
+      <button type="submit" style="display: none;"></button>
+      <vs-button :disabled="isPending" @click="submitForm" color="primary" type="filled">Login</vs-button>
+    </form>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import {reactive, watchEffect} from 'vue';
+
+import { loginValidation } from '@/lib/vuelidate/validate.syntax';
+import useVuelidate from '@vuelidate/core';
+const auth = reactive({
+  email: '',
+  password: ''
+});
+const v$ = useVuelidate(loginValidation, auth);
+
+import { useNotification } from "@/lib/composable/notification";
+import {inject} from "vue";
+const vs = inject('$vs')
+const { successMessage, errorMessage, loading } = useNotification()
 
 
-const inputs = ref([
+import { authQueries } from '@/lib/tanstack/auth.queries';
+const { loginMutation } = authQueries();
+const { mutateAsync: login, isError, isPending, isSuccess, error } = loginMutation();
+
+const inputs = [
   {
     placeholder: "Enter your email address",
     icon: "mail",
     type: "email",
-    value: ""
+    field: "email"
   },
   {
     placeholder: "Enter your password",
     icon: "lock",
     type: "password",
-    value: ""
+    field: "password"
   }
-]);
+];
+
+const submitForm = () => {
+  v$.value.$touch();
+  if (v$.value.$invalid) {
+    console.log('Form is invalid')
+    return
+  }
+  login(auth)
+};
+
+watchEffect(() => {
+  if (isSuccess.value)
+    successMessage(vs, 'Logged in successfully')
+  if (isPending.value)
+    loading(vs)
+  if(!isPending.value)
+    vs.loading.close()
+  if (isError.value)
+    errorMessage(vs, error.value)
+})
+
 </script>
 <style scoped>
 .login-box__input {

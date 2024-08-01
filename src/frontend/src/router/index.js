@@ -9,8 +9,18 @@ const routes = [
   },
   {
     path: '/auth',
-    name: 'auth',
-    component: () => import("../views/auth/AuthView")
+    children: [
+      {
+        path: '',
+        name: 'auth',
+        component: () => import("../views/auth/AuthView")
+      },
+      {
+        path: 'otp',
+        name: 'otp',
+        component: () => import("../views/auth/OTPView")
+      }
+    ]
   },
   {
     path: "/problems",

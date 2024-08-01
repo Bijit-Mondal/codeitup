@@ -1,15 +1,5 @@
 <template>
   <div class="login-box">
-    <div v-if="isError">
-      <vs-alert active="true" color="danger">
-        {{ error }}
-      </vs-alert>
-    </div>
-    <div v-if="isSuccess">
-      <vs-alert active="true" color="success">
-        {{  data }}
-      </vs-alert>
-    </div>
     <form @submit.prevent="submitForm">
       <vs-input
           v-for="(input, index) in inputs"
@@ -17,49 +7,49 @@
           class="login-box__input"
           :danger="v$[input.field].$error"
           :danger-text="v$[input.field].$errors[0]?.$message"
+          val-icon-danger="error"
           :placeholder="input.placeholder"
           :icon="input.icon"
           :type="input.type"
-          :disabled="isPending"
           v-model="auth[input.field]"
           @blur="v$[input.field].$touch()"
       />
       <button type="submit" style="display: none;"></button>
-      <vs-button color="primary" type="filled" @click="submitForm">Register</vs-button>
+      <vs-button color="primary" :disabled="isPending" type="filled" @click="submitForm">Register</vs-button>
     </form>
   </div>
 </template>
 
 
 <script setup>
-/* eslint-disable */
-import { reactive, ref } from 'vue';
+import {reactive, watchEffect} from 'vue';
 
 import { registerValidation } from '@/lib/vuelidate/validate.syntax';
 import useVuelidate from '@vuelidate/core';
-
-import { authQueries } from '@/lib/tanstack/auth.queries';
-
-const { registerMutation } = authQueries();
-
-const { mutateAsync: register, isError, isPending, isSuccess, data, error } = registerMutation();
-
 const auth = reactive({
   name: '',
   profileName: '',
   email: '',
   password: ''
 });
-
-
 const v$ = useVuelidate(registerValidation, auth);
 
-const inputs = ref([
+import { useNotification } from "@/lib/composable/notification";
+import {inject} from "vue";
+const vs = inject('$vs')
+const { successMessage, errorMessage, loading } = useNotification()
+
+
+import { authQueries } from '@/lib/tanstack/auth.queries';
+const { registerMutation } = authQueries();
+const { mutateAsync: register, isError, isPending, isSuccess, error } = registerMutation();
+
+const inputs = [
   { placeholder: "Enter your full name", icon: "person", type: "text", field: "name" },
   { placeholder: "Enter your username", icon: "face", type: "text", field: "profileName" },
   { placeholder: "Enter your email address", icon: "mail", type: "email", field: "email" },
   { placeholder: "Enter your password", icon: "lock", type: "password", field: "password" }
-]);
+];
 
 
 const submitForm = () => {
@@ -72,6 +62,17 @@ const submitForm = () => {
   console.log('Form is valid');
   register(auth);
 };
+
+watchEffect(() => {
+  if (isSuccess.value)
+    successMessage(vs, 'Registered successfully! Please verify OTP.')
+  if (isPending.value)
+    loading(vs)
+  if(!isPending.value)
+    vs.loading.close()
+  if (isError.value)
+    errorMessage(vs, error.value)
+})
 
 </script>
 

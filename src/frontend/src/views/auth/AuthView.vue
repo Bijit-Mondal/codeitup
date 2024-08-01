@@ -19,7 +19,7 @@ const Register = defineAsyncComponent(() => import('../../component/auth/Registe
 
 const options = ref([
   { label: 'Register', value: markRaw(Register) },
-  { label: 'Login', value: markRaw(Login) }
+  { label: 'Login', value: markRaw(Login) },
 ]);
 
 const currentComponent = shallowRef(options.value[1].value);

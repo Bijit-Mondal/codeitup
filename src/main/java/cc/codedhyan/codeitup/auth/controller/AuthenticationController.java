@@ -8,6 +8,7 @@ import cc.codedhyan.codeitup.auth.service.AuthenticationService;
 import cc.codedhyan.codeitup.exception.ApiInternalServerErrorException;
 import cc.codedhyan.codeitup.exception.ApiRequestExceptionBadRequest;
 import cc.codedhyan.codeitup.exception.ApiRequestExceptionConflict;
+import cc.codedhyan.codeitup.exception.ApiRequestExceptionUnauthorized;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -53,7 +54,7 @@ public class AuthenticationController {
             return ResponseEntity.ok(authenticationService.authenticate(request));
         } catch ( BadCredentialsException e) {
             logger.error("Bad credentials", e);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+            throw new ApiRequestExceptionUnauthorized(e.getMessage(),e);
         }
     }
 
@@ -66,10 +67,10 @@ public class AuthenticationController {
             return ResponseEntity.accepted().build();
         } catch ( UsernameNotFoundException e) {
             logger.error("Bad credentials", e);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+            throw new ApiRequestExceptionUnauthorized(e.getMessage(),e);
         } catch (MessagingException e) {
             logger.error("Error sending mail", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            throw new ApiInternalServerErrorException(e.getMessage(),e);
         }
     }
 
@@ -80,9 +81,13 @@ public class AuthenticationController {
         try{
             authenticationService.otpValidate(request);
             return ResponseEntity.accepted().build();
-        } catch (AuthenticationService.OTPValidationFailedException e) {
+        }catch ( UsernameNotFoundException e) {
+            logger.error("Bad credentials", e);
+            throw new ApiRequestExceptionUnauthorized(e.getMessage(),e);
+        }
+        catch (AuthenticationService.OTPValidationFailedException e) {
             logger.error("OTP validation failed", e);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+            throw new ApiRequestExceptionUnauthorized(e.getMessage(),e);
         }
     }
 

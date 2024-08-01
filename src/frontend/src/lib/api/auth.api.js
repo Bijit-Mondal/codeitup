@@ -1,5 +1,4 @@
 export const register = async (data) => {
-    // eslint-disable-next-line no-useless-catch
     const response = await fetch('/api/v1/auth/register', {
         method: 'POST',
         headers: {
@@ -15,16 +14,31 @@ export const register = async (data) => {
 };
 
 export const login = async (data) => {
-    try {
-        const response = await fetch('/api/v1/auth/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
-        return await response.json();
-    } catch (error) {
-        return { error: error.message };
+    const response = await fetch('/api/v1/auth/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+    if(!response.ok) {
+        const res = await response.json();
+        throw new Error(res.message);
     }
+    return await response.json();
 };
+
+export const otpValidate = async (data) => {
+    const response = await fetch('/api/v1/auth/validate', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+    if(!response.ok) {
+        const res = await response.json();
+        throw new Error(res.message);
+    }
+    return "OTP validation successful. You can now login.";
+}

@@ -11,9 +11,7 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue';
-
-// Define the props
+/* eslint-disable */
 const props = defineProps({
   options: {
     type: Array,
@@ -25,10 +23,8 @@ const props = defineProps({
   }
 });
 
-// Define the emits
 const emit = defineEmits(['update:currentComponent']);
 
-// Function to handle button click
 function toggleComponent(com) {
   emit('update:currentComponent', com);
 }

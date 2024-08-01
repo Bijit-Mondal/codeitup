@@ -42,4 +42,15 @@ public class ApiExceptionHandler {
                 .build();
         return new ResponseEntity<>(apiException, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(value = { ApiRequestExceptionUnauthorized.class })
+    public ResponseEntity<Object> handleUnauthorizedException(ApiRequestExceptionUnauthorized e) {
+        ApiException apiException =  ApiException.builder()
+                .message(e.getMessage())
+                .httpStatus(HttpStatus.UNAUTHORIZED)
+                .throwable(e)
+                .timestamp(ZonedDateTime.now())
+                .build();
+        return new ResponseEntity<>(apiException, HttpStatus.UNAUTHORIZED);
+    }
 }

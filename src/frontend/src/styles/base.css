@@ -17,3 +17,20 @@ body {
     -webkit-tap-highlight-color: transparent;
     scrollbar-width: none;
 }
+
+/* vuesax notification fixed */
+.vs-noti-top-center {
+    color: var(--dark) !important;
+}
+.vs-notifications {
+    margin-top: 3rem !important;
+}
+/* input num box */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type=number] {
+    -moz-appearance: textfield;
+}

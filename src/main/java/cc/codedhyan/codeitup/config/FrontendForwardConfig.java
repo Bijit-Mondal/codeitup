@@ -11,7 +11,7 @@ public class FrontendForwardConfig {
 //    TODO
 //    Better regex needed
 
-    @GetMapping({ "/app","/app/","/app/problems/**","/app/problems"})
+    @GetMapping({ "/app","/app/","/app/problems/**","/app/problems","/app/auth","/app/auth/**"})
     public String forward() {
         log.info("Forwarding to /app");
         return "forward:/app/index.html";

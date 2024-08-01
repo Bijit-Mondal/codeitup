@@ -15,6 +15,8 @@
     "core-js": "^3.8.3",
     "file-loader": "^6.2.0",
     "material-icons": "^1.13.12",
+    "pinia": "^2.2.0",
+    "pinia-plugin-persistedstate": "^3.2.1",
     "vue": "3.4.33",
     "vue-router": "^4.0.3",
     "vue3-ace-editor": "2.2.4",
