@@ -1,13 +1,13 @@
 <template>
-  <div class="admin-home">
-    <HomeComponent/>
+  <div class="admin-view">
+    <RouterView/>
   </div>
 </template>
 <script setup>
-import HomeComponent from "@/component/admin/HomeComponent"
+import { RouterView } from 'vue-router'
 </script>
 <style scoped>
-.admin-home{
+.admin-view{
   margin: 0.5rem;
   background-color: var(--dark);
   border-radius: 5px;

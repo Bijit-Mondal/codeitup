@@ -39,11 +39,17 @@ const routes = [
   },
   {
     path: "/admin",
+    component: () => import("../views/admin/AdminView"),
     children: [
       {
         path: '',
         name: 'admin-home',
-        component: () => import("../views/admin/HomeView")
+        component: () => import("../views/admin/HomeView/HomeView")
+      },
+      {
+        path: 'create-problem',
+        name: 'create-problem',
+        component: () => import("../views/admin/ProblemView/CreateProblemView")
       }
     ]
   }

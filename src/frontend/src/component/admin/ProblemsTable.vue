@@ -104,7 +104,7 @@
 }
 </style>
 <style>
-.admin-home-component__problems{
+.table {
   & .vs-button-danger.vs-button-border .vs-button-backgroundx, .vs-button-danger.vs-button-flat .vs-button-backgroundx{
     background: transparent !important;
   }
