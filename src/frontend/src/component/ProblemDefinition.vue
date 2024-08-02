@@ -7,8 +7,8 @@
       </vs-chip>
     </vs-row>
     <div class="problem-definition__content">
-      <p v-html="problem">
-      </p>
+      <span v-html="problem">
+      </span>
     </div>
   </div>
 </template>
@@ -24,21 +24,26 @@ const problem = ref('Given an array of integers array, return the sum of all ele
 problem.value += problem.value;
 </script>
 <style scoped>
-  .problem-definition {
-    padding: 0.3rem;
-    max-height: 80vh;
-    overflow-y: auto;
+.problem-definition {
+  padding: 0.3rem;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.problem-definition > .problem-definition__chip {
+  margin : 0.4rem 0;
+}
+.problem-definition > .problem-definition__heading {
+  font-size: 18px;
+}
+.problem-definition > .problem-definition__content {
+  font-size: 15px;
+  /*Disable user select  */
+  user-select: none;
+  -webkit-user-select: none;
+}
+.problem-definition__content {
+  a {
+    color: var(--primary);
   }
-  .problem-definition > .problem-definition__chip {
-    margin : 0.4rem 0;
-  }
-  .problem-definition > .problem-definition__heading {
-    font-size: 18px;
-  }
-  .problem-definition > .problem-definition__content {
-    font-size: 15px;
-    /*Disable user select  */
-    user-select: none;
-    -webkit-user-select: none;
-  }
+}
 </style>
