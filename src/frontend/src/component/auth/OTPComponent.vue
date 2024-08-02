@@ -36,7 +36,6 @@
 }
 </style>
 <script setup>
-/* eslint-disable */
 import {reactive, watchEffect} from 'vue';
 import { useRouter } from "vue-router";
 
@@ -57,7 +56,7 @@ const v$ = useVuelidate(otpValidation, otp);
 
 import { authQueries } from '@/lib/tanstack/auth.queries';
 const { otpValidateMutation } = authQueries();
-const { mutateAsync: validate, isError, isPending, isSuccess, data, error } = otpValidateMutation()
+const { mutateAsync: validate, isError, isPending, isSuccess, error } = otpValidateMutation()
 
 const submitOTP = () => {
   v$.value.$touch()

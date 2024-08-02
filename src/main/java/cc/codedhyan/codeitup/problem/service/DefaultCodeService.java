@@ -7,6 +7,7 @@ import cc.codedhyan.codeitup.problem.model.DefaultCode;
 import cc.codedhyan.codeitup.problem.repository.DefaultCodeRepository;
 import cc.codedhyan.codeitup.problem.repository.LanguageRepository;
 import cc.codedhyan.codeitup.problem.repository.ProblemRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -51,6 +52,7 @@ public class DefaultCodeService {
         return defaultCodeRepository.findByProblemId(problemId);
     }
 
+    @Transactional
     public void deleteAllDefaultCodes(String problemId) {
         if (!problemRepository.existsById(problemId)) {
             log.error("Problem with id: {} not found", problemId);
@@ -59,6 +61,7 @@ public class DefaultCodeService {
         defaultCodeRepository.deleteAllByProblemId(problemId);
     }
 
+    @Transactional
     public void deleteDefaultCode(String problemId, Integer languageId) {
         if (!problemRepository.existsById(problemId)) {
             throw new ApiRequestExceptionNotFound("Problem with id: " + problemId + " not found");

@@ -37,6 +37,16 @@ const routes = [
       }
     ]
   },
+  {
+    path: "/admin",
+    children: [
+      {
+        path: '',
+        name: 'admin-home',
+        component: () => import("../views/admin/HomeView")
+      }
+    ]
+  }
   // {
   //   path: '/about',
   //   name: 'about',

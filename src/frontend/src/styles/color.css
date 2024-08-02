@@ -43,10 +43,16 @@ svg {
 .vs-button-filled .vs-button-text {
     color: rgb(var(--vs-text));
 }
+.vs-button--icon {
+    color: rgb(var(--vs-text));
+}
 
 @media (prefers-color-scheme: dark) {
     .vs-button-filled .vs-button-text {
-        color: var(--background);
+        color: var(--background) !important;
+    }
+    .vs-button--icon {
+        color: var(--background) !important;
     }
 }
 
@@ -54,3 +60,5 @@ svg {
 .skeleton-loading {
     background-color: rgba(var(--vs-dark,0.1)) !important;
 }
+
+/* selection color */
