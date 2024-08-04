@@ -7,23 +7,27 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/admin/language")
+@RequestMapping("/api/v1/user/language")
 @Slf4j
 public class LanguageController {
     private final LanguageService languageService;
 
     @PostMapping("")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Language> addLanguage(
             @RequestBody @Valid LanguageRequest language
     ){
         log.info("Adding language: {}", language);
         return ResponseEntity.ok(languageService.addLanguage(language));
+    }
+
+    @GetMapping("")
+    public ResponseEntity<?> getLanguages() {
+        return ResponseEntity.ok(languageService.getLanguages());
     }
 }

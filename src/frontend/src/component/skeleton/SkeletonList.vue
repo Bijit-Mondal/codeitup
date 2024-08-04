@@ -2,7 +2,7 @@
 <!--  <SkeletonTheme background-color="#303030">-->
     <h1>
       <!--Skeleton will inherit <p> height -->
-      <Skeleton :rows="20" />
+      <Skeleton :rows="10" />
     </h1>
 <!--  </SkeletonTheme>-->
 </template>

@@ -29,13 +29,6 @@
       </select>
     </div>
   </div>
-  <div class="problem-editor__submit">
-    <vs-row vs-type="flex" vs-justify="flex-end" vs-w="12">
-      <vs-col vs-type="flex" vs-justify="flex-end" vs-align="center" vs-w="2">
-        <vs-button color="primary" type="border" @click="submit">Submit</vs-button>
-      </vs-col>
-    </vs-row>
-  </div>
 </template>
 
 <script setup>
@@ -49,7 +42,7 @@ const props = defineProps({
   difficulty: String,
 });
 
-const emit = defineEmits(["update:title", "update:slug", "update:description", "update:testcasesLink", "update:difficulty", "submit:problem"]);
+const emit = defineEmits(["update:title", "update:slug", "update:description", "update:testcasesLink", "update:difficulty"]);
 
 const localTitle = ref(props.title);
 const localSlug = ref(props.slug);
@@ -132,10 +125,6 @@ const applyMarkdown = (action) => {
   updateDescription();
 };
 
-const submit = () => {
-  emit("submit:problem");
-};
-
 watch(props, (newProps) => {
   localTitle.value = newProps.title;
   localSlug.value = newProps.slug;
@@ -211,9 +200,6 @@ watch(props, (newProps) => {
  }
 }
 }
-}
-.problem-editor__submit {
-  margin: 0.2rem 0;
 }
 </style>
 

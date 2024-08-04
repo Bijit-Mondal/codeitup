@@ -27,6 +27,9 @@ public class Language {
     @Column(unique = true, nullable = false)
     private Integer judge0id;
 
+    @Column(unique = true,nullable = false)
+    private String aceEditor;
+
     @ToString.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "language",fetch = FetchType.EAGER)

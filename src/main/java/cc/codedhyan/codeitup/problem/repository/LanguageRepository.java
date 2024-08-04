@@ -7,5 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LanguageRepository extends JpaRepository<Language,Integer> {
     boolean existsByJudge0id(Integer judge0id);
+    boolean existsByAceEditor(String aceEditor);
     boolean existsById(Integer id);
 }

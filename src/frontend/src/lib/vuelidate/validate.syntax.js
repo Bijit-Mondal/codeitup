@@ -18,9 +18,16 @@ export const otpValidation  = {
 }
 
 export const problemValidation = {
-    title: { required, maxLength: maxLength(20) },
+    title: { required, maxLength: maxLength(40) },
     slug: { required, maxLength: maxLength(20) },
     description: { required,minLength: minLength(50) },
     testCases: { required, url},
     difficulty: { required }
+}
+
+export const defaultCodeValidation = {
+    problemId: {required},
+    runnerCode: {required, minLength: minLength(1) },
+    code: {required, minLength: minLength(1)},
+    languageId: { required }
 }

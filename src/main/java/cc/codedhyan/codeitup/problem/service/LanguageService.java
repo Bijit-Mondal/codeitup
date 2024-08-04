@@ -7,6 +7,8 @@ import cc.codedhyan.codeitup.problem.repository.LanguageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class LanguageService {
@@ -16,11 +18,19 @@ public class LanguageService {
         if(languageRepository.existsByJudge0id(language.getJudge0id())){
             throw new ApiRequestExceptionConflict("Language with judge0id: "+language.getJudge0id()+" already exists");
         }
+        if(languageRepository.existsByAceEditor(language.getAceEditor())){
+            throw new ApiRequestExceptionConflict("Language with ace_editor name: "+language.getName()+" already exists");
+        }
         Language lang =  Language.builder()
                 .name(language.getName())
                 .judge0id(language.getJudge0id())
+                .aceEditor(language.getAceEditor())
                 .build();
         languageRepository.save(lang);
         return lang;
+    }
+
+    public List<Language> getLanguages() {
+        return languageRepository.findAll();
     }
 }

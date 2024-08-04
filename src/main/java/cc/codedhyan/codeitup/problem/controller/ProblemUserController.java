@@ -21,12 +21,12 @@ public class ProblemUserController {
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String sort
     ) {
-        return ResponseEntity.ok(problemService.getProblems(page, size, sort));
+        return ResponseEntity.ok(problemService.getNonHiddenProblems(page, size, sort));
     }
 
     @GetMapping("/{slug}")
     public ResponseEntity<?> getProblemBySlug(@PathVariable String slug) {
-        return ResponseEntity.ok(problemService.getProblemBySlug(slug));
+        return ResponseEntity.ok(problemService.getNonHiddenProblemBySlug(slug));
     }
 }
 

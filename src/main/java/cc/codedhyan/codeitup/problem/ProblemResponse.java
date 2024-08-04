@@ -18,6 +18,7 @@ public class ProblemResponse {
     private String title;
     private String slug;
     private String description;
+    private String testCases;
     private Difficulty difficulty;
     private Boolean hidden;
     private Long solved;

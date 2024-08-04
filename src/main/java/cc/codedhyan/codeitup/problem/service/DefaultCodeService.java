@@ -74,8 +74,7 @@ public class DefaultCodeService {
     }
 
     public DefaultCode updateDefaultCode(String problemId, Integer languageId, DefaultCodeRequest defaultCode) {
-        DefaultCode defaultCodeEntity = defaultCodeRepository.findByProblemIdAndLanguageId(problemId, languageId)
-                .orElseThrow(() -> new ApiRequestExceptionNotFound("Default code not found for problemId: " + problemId + ", languageId: " + languageId));
+        DefaultCode defaultCodeEntity = defaultCodeRepository.findByProblemIdAndLanguageId(problemId, languageId).orElseThrow(() -> new ApiRequestExceptionNotFound("Default code not found for problemId: " + problemId + ", languageId: " + languageId));
         defaultCodeEntity.setCode(defaultCode.getCode());
         defaultCodeEntity.setRunnerCode(defaultCode.getRunnerCode());
         return defaultCodeRepository.save(defaultCodeEntity);

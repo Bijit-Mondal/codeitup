@@ -3,38 +3,39 @@
     <h2>
       Problems
     </h2>
-    <vs-tabs class="problem-tabs__tabs" alignment="fixed" hover-line hover-text>
-      <vs-tab label="Striver's A-Z DSA Sheet">
-        <div class="tab-content">
+<!--    tab is commented need to open in future-->
+<!--    <vs-tabs class="problem-tabs__tabs" alignment="fixed" hover-line hover-text>-->
+<!--      <vs-tab label="Striver's A-Z DSA Sheet">-->
+<!--        <div class="tab-content">-->
           <Suspense>
             <ProblemList/>
             <template #fallback>
               <SkeletonList/>
             </template>
           </Suspense>
-        </div>
-      </vs-tab>
-      <vs-tab label="Striver's SDE Sheet">
-        <div>
-          <Suspense>
-            <ProblemList/>
-            <template #fallback>
-              <SkeletonList/>
-            </template>
-          </Suspense>
-        </div>
-      </vs-tab>
-      <vs-tab label="Striver's 79 Sheet">
-        <div>
+<!--        </div>-->
+<!--      </vs-tab>-->
+<!--      <vs-tab label="Striver's SDE Sheet">-->
+<!--        <div>-->
+<!--          <Suspense>-->
+<!--            <ProblemList/>-->
+<!--            <template #fallback>-->
+<!--              <SkeletonList/>-->
+<!--            </template>-->
+<!--          </Suspense>-->
+<!--        </div>-->
+<!--      </vs-tab>-->
+<!--      <vs-tab label="Striver's 79 Sheet">-->
+<!--        <div>-->
 
-        </div>
-      </vs-tab>
-      <vs-tab label="Blind 75 Sheet">
-        <div>
+<!--        </div>-->
+<!--      </vs-tab>-->
+<!--      <vs-tab label="Blind 75 Sheet">-->
+<!--        <div>-->
 
-        </div>
-      </vs-tab>
-    </vs-tabs>
+<!--        </div>-->
+<!--      </vs-tab>-->
+<!--    </vs-tabs>-->
   </div>
 </template>
 <script setup>
@@ -59,6 +60,7 @@ const ProblemList = defineAsyncComponent(() => {
   & h2 {
       margin-left: 1rem;
       font-size: 18px;
+      margin-bottom: 10px;
   }
   & .problem-tabs__tabs {
     margin-top: 1em;

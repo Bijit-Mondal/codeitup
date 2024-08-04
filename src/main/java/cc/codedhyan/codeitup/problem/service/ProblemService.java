@@ -34,18 +34,55 @@ public class ProblemService {
         return prob;
     }
 
-    public Page<Problem> getProblems(int page, int size, String sort) {
+    public Problem updateProblem(String slug, ProblemRequest problem) {
+        Problem prob = problemRepository.findBySlug(slug)
+                .orElseThrow(() -> new ApiRequestExceptionNotFound("Problem with slug: "+slug+" not found"));
+        prob.setTitle(problem.getTitle());
+        prob.setDescription(problem.getDescription());
+        prob.setTestCases(problem.getTestCases());
+        prob.setDifficulty(problem.getDifficulty());
+        prob.setSolutionGist(problem.getSolutionGist());
+        prob.setSolutionTutorial(problem.getSolutionTutorial());
+        problemRepository.save(prob);
+        return prob;
+    }
+
+    public Page<Problem> getNonHiddenProblems(int page, int size, String sort) {
         Sort sortObject = Sort.by(Sort.Direction.DESC, sort != null ? sort : "createdAt");
         PageRequest pageRequest = PageRequest.of(page, size, sortObject);
         return problemRepository.findByHiddenFalse(pageRequest);
     }
-    public ProblemResponse getProblemBySlug(String slug) {
+
+    public Page<Problem> getAllProblems(int page, int size, String sort) {
+        Sort sortObject = Sort.by(Sort.Direction.DESC, sort != null ? sort : "createdAt");
+        PageRequest pageRequest = PageRequest.of(page, size, sortObject);
+        return problemRepository.findAll(pageRequest);
+    }
+
+    public ProblemResponse getNonHiddenProblemBySlug(String slug) {
         Problem problem = problemRepository.findBySlugAndHiddenFalse(slug)
                 .orElseThrow(() -> new ApiRequestExceptionNotFound("Problem with slug: "+slug+" not found"));
         return ProblemResponse.builder()
                 .id(problem.getId())
                 .title(problem.getTitle())
                 .slug(problem.getSlug())
+                .description(problem.getDescription())
+                .hidden(problem.getHidden())
+                .difficulty(problem.getDifficulty())
+                .defaultCode(problem.getDefaultCode())
+                .solutionGist(problem.getSolutionGist())
+                .solutionTutorial(problem.getSolutionTutorial())
+                .build();
+    }
+
+    public ProblemResponse getProblemBySlug(String slug) {
+        Problem problem = problemRepository.findBySlug(slug)
+                .orElseThrow(() -> new ApiRequestExceptionNotFound("Problem with slug: "+slug+" not found"));
+        return ProblemResponse.builder()
+                .id(problem.getId())
+                .title(problem.getTitle())
+                .slug(problem.getSlug())
+                .testCases(problem.getTestCases())
                 .description(problem.getDescription())
                 .hidden(problem.getHidden())
                 .difficulty(problem.getDifficulty())

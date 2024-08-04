@@ -4,9 +4,9 @@
       <vs-col vs-type="flex" vs-justify="center" type="color" color="primary" vs-align="center" vs-lg="2" vs-sm="4">
         <vs-select
             class="selectExample"
-            v-model="select"
+            v-model="localLanguage"
         >
-          <vs-select-item :key="index" :modelValue="item.value" :text="item.text" v-for="item,index in options" />
+          <vs-select-item :key="item.id" :modelValue="item.id" :text="item.name" v-for="item in languages" />
         </vs-select>
       </vs-col>
       <vs-col vs-type="flex" vs-justify="center" type="color" color="primary" vs-align="center" vs-lg="2" vs-sm="4">
@@ -20,68 +20,75 @@
     </vs-row>
     <div class="code-editor__ace">
       <v-ace-editor
-          v-model:value="content"
-          lang="java"
+          v-model:value="localContent"
+          :lang="selectedLanguageMode"
           :theme="theme"
           style="height: 100%; width: 100%; margin: 0.02rem; border-radius: 5px"
       />
-    </div>
-    <div class="code-editor__submit">
-      <vs-row vs-type="flex" vs-justify="flex-end" vs-w="12">
-        <vs-col vs-type="flex" vs-justify="center" vs-align="center" vs-w="2">
-          <vs-button color="primary" type="border" @click="showOnConsole">Submit</vs-button>
-        </vs-col>
-      </vs-row>
     </div>
   </div>
 </template>
 
 <script setup>
-import {ref, } from "vue";
-import ace from "ace-builds";
-
+import { ref, watch, defineProps, defineEmits } from "vue";
 import { VAceEditor } from "vue3-ace-editor";
-import "ace-builds/src-noconflict/mode-java"; // Load the language definition file used below
 
+// Load the language definition files used below
+import "ace-builds/src-noconflict/mode-javascript";
+import "ace-builds/src-noconflict/mode-java";
+import "ace-builds/src-noconflict/mode-groovy";
+import "ace-builds/src-noconflict/mode-c_cpp";
+
+import "ace-builds/src-noconflict/theme-tomorrow_night_eighties";
 import "ace-builds/src-noconflict/theme-pastel_on_dark";
-import "ace-builds/src-noconflict/theme-clouds"
-import "ace-builds/src-noconflict/theme-dracula"
+import "ace-builds/src-noconflict/theme-clouds";
+import "ace-builds/src-noconflict/theme-dracula";
 
-import snippetsJavaUrl from "file-loader?esModule=false!ace-builds/src-noconflict/snippets/java";
-ace.config.setModuleUrl("ace/snippets/java", snippetsJavaUrl);
+const props = defineProps({
+  content: String,
+  language: Number,
+  languages: {
+    type: Array,
+    default: () => []
+  }
+});
 
-const content = ref(
-    `public class Main {
-    public static void main(String[] args) {
-        System.out.println("Hello, World!");
-    }
-}`
-);
+const localContent = ref(props.content);
+const localLanguage = ref(props.language);
+const selectedLanguageMode = ref(getLanguageMode(props.language));
 
-const options = ref([
-  {text:'Java',value:0},
-  {text:'C++',value:2},
-  {text:'JavaScript',value:3},
-])
+const emit = defineEmits(['update:language', 'update:content']);
 
-const select = ref(options.value[0].text);
+watch(() => props.language, (newLanguage) => {
+  localLanguage.value = newLanguage;
+  selectedLanguageMode.value = getLanguageMode(newLanguage);
+});
+
+watch(localLanguage, (newLanguage) => {
+  emit('update:language', newLanguage);
+  selectedLanguageMode.value = getLanguageMode(newLanguage);
+});
+
+watch(localContent, (newContent) => {
+  emit('update:content', newContent);
+});
+
+function getLanguageMode(languageId) {
+  const language = props.languages.find((language) => language.id === languageId);
+  return language ? language.aceEditor : 'java';
+}
 
 const themes = ref([
-  { text: 'Pastel on Dark', value: 'pastel_on_dark', index: 0 },
-  { text: 'Clouds', value: 'clouds', index: 1 },
-  { text: 'Dracula', value: 'dracula', index: 2}
-])
-const theme = ref(themes.value[0].value)
-
-const showOnConsole = () => {
-  console.log(content.value);
-};
+  { text: 'Tomorrow Night', value: 'tomorrow_night_eighties', index: 0},
+  { text: 'Pastel on Dark', value: 'pastel_on_dark', index: 1 },
+  { text: 'Clouds', value: 'clouds', index: 2 },
+  { text: 'Dracula', value: 'dracula', index: 3}
+]);
+const theme = ref(themes.value[0].value);
 </script>
 
+
 <style scoped>
-.code-editor > .code-editor__submit {
-  margin-top: 1rem;
-}
 .code-editor > .code-editor__config {
   margin-bottom: 0.5rem;
 }

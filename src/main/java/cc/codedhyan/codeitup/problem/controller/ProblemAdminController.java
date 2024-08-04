@@ -6,10 +6,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,5 +21,29 @@ public class ProblemAdminController {
     ){
         log.info("Adding problem: {}", problem);
         return ResponseEntity.ok(problemService.addProblem(problem));
+    }
+
+
+    @GetMapping("")
+    public ResponseEntity<?> getProblems(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String sort
+    ) {
+        return ResponseEntity.ok(problemService.getAllProblems(page, size, sort));
+    }
+
+    @GetMapping("/{slug}")
+    public ResponseEntity<?> getProblemBySlug(@PathVariable String slug) {
+        return ResponseEntity.ok(problemService.getProblemBySlug(slug));
+    }
+
+    @PutMapping("/{slug}")
+    public ResponseEntity<?> updateProblem(
+            @PathVariable String slug,
+            @RequestBody @Valid ProblemRequest problem
+    ){
+        log.info("Updating problem: {}", problem);
+        return ResponseEntity.ok(problemService.updateProblem(slug, problem));
     }
 }

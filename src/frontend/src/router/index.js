@@ -39,28 +39,36 @@ const routes = [
   },
   {
     path: "/admin",
+    redirect: { name: 'admin-home' },
     component: () => import("../views/admin/AdminView"),
     children: [
       {
-        path: '',
-        name: 'admin-home',
-        component: () => import("../views/admin/HomeView/HomeView")
+        path: 'problems',
+        children: [
+          {
+            path: '',
+            name: 'admin-home',
+            component: () => import("../views/admin/HomeView/HomeView")
+          },
+          {
+            path: 'create',
+            name: 'create-problem',
+            component: () => import("../views/admin/ProblemView/CreateProblemView")
+          },
+          {
+            path: 'edit/:slug',
+            name: 'edit-problem',
+            component: () => import("../views/admin/ProblemView/EditProblemView")
+          },
+          {
+            path: 'default-code/:id',
+            name: 'default-code',
+            component: () => import("../views/admin/ProblemView/CreateDefaultCodeView")
+          }
+        ]
       },
-      {
-        path: 'create-problem',
-        name: 'create-problem',
-        component: () => import("../views/admin/ProblemView/CreateProblemView")
-      }
     ]
   }
-  // {
-  //   path: '/about',
-  //   name: 'about',
-  //   // route level code-splitting
-  //   // this generates a separate chunk (about.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  // }
 ]
 
 const router = createRouter({

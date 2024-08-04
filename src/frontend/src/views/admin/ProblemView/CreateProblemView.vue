@@ -16,8 +16,14 @@
           v-model:description="problem.description"
           v-model:testcases-link="problem.testCases"
           v-model:difficulty="problem.difficulty"
-          @submit:problem="submitProblem"
       />
+      <div class="problem-editor__submit">
+        <vs-row vs-type="flex" vs-justify="flex-end" vs-w="12">
+          <vs-col vs-type="flex" vs-justify="flex-end" vs-align="center" vs-w="4">
+            <vs-button color="primary" type="border" @click="submitProblem">Submit</vs-button>
+          </vs-col>
+        </vs-row>
+      </div>
     </div>
   </div>
 </template>

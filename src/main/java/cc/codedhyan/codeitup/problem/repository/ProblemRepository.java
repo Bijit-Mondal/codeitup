@@ -14,5 +14,6 @@ public interface ProblemRepository extends JpaRepository<Problem,String> {
     boolean existsBySlug(String slug);
     boolean existsById(String id);
     Page<Problem> findByHiddenFalse(PageRequest pageRequest);
+    Optional<Problem> findBySlug(String slug);
     Optional<Problem> findBySlugAndHiddenFalse(String slug);
 }
