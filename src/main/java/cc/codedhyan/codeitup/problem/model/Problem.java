@@ -30,8 +30,10 @@ public class Problem {
     private String slug;
 
     @Column(nullable = false, columnDefinition = "TEXT")
+    @JsonIgnore
     private String description;
 
+    @JsonIgnore
     @Column(nullable = false, columnDefinition = "TEXT")
     private String testCases;
 
@@ -61,6 +63,7 @@ public class Problem {
     @OneToMany(mappedBy = "problem", fetch = FetchType.EAGER)
     private List<Submission> submissions;
 
+    @JsonIgnore
     @ToString.Exclude
     @OneToMany(mappedBy = "problem", fetch = FetchType.EAGER)
     private List<DefaultCode> defaultCode;

@@ -38,7 +38,7 @@ const renderedDescription = computed(() => marked(props.description));
 watch(() => props.description, () => {
   nextTick(() => {
     document.querySelectorAll("pre code").forEach((block) => {
-      hljs.highlightBlock(block);
+      hljs.highlightElement(block);
     });
   })
 });
@@ -60,7 +60,7 @@ const difficultyColor = computed(() => {
 /*for code box*/
 .problem-definition {
   padding: 0.3rem;
-  max-height: 80vh;
+  max-height: 85vh;
   overflow-y: auto;
   line-height: 1.2rem;
 }

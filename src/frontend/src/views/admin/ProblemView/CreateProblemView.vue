@@ -2,38 +2,32 @@
   <div class="split problem-box">
     <div id="split-0">
       <ProblemMDView
-          :title="title"
-          :slug="slug"
-          :description="description"
-          :testcases-link="testcasesLink"
-          :difficulty="difficulty"
+          :title="problem.title"
+          :slug="problem.slug"
+          :description="problem.description"
+          :testcases-link="problem.testCases"
+          :difficulty="problem.difficulty"
       />
     </div>
     <div id="split-1">
       <ProblemMDEditor
-          v-model:title="title"
-          v-model:slug="slug"
-          v-model:description="description"
-          v-model:testcases-link="testcasesLink"
-          v-model:difficulty="difficulty"
+          v-model:title="problem.title"
+          v-model:slug="problem.slug"
+          v-model:description="problem.description"
+          v-model:testcases-link="problem.testCases"
+          v-model:difficulty="problem.difficulty"
+          @submit:problem="submitProblem"
       />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { defineAsyncComponent, onMounted } from "vue";
+import {reactive, watchEffect} from "vue";
+import { onMounted } from "vue";
 
-const title = ref("");
-const slug = ref("");
-const description = ref("");
-const testcasesLink = ref("");
-const difficulty = ref("");
-
-const ProblemMDEditor = defineAsyncComponent(() => import("../../../component/admin/ProblemMDEditor.vue"));
-const ProblemMDView = defineAsyncComponent(() => import("../../../component/admin/ProblemMDView.vue"));
-
+import ProblemMDEditor from "@/component/admin/ProblemMDEditor.vue";
+import  ProblemMDView from "@/component/admin/ProblemMDView.vue";
 import Split from 'split.js';
 onMounted(() => {
   Split(['#split-0', '#split-1'], {
@@ -42,6 +36,50 @@ onMounted(() => {
     gutterSize: 4,
   });
 });
+
+import { problemValidation } from "@/lib/vuelidate/validate.syntax";
+import useVuelidate from "@vuelidate/core";
+const problem = reactive({
+  title: '',
+  slug: '',
+  description: '',
+  testCases: '',
+  difficulty: '',
+})
+const v$ = useVuelidate(problemValidation, problem);
+
+import { useNotification } from "@/lib/composable/notification";
+import {inject} from "vue";
+const vs = inject('$vs')
+const { successMessage, errorMessage, warningMessage, loading } = useNotification()
+
+import { problemAdminQueries } from "@/lib/tanstack/problem.admin.queries";
+const { addProblemMutation } = problemAdminQueries();
+const { mutateAsync: addProblem, isError, isPending, isSuccess, error } = addProblemMutation();
+
+const submitProblem = () => {
+  v$.value.$touch();
+  if (v$.value.$invalid) {
+    for(let key in v$.value.$errors) {
+      warningMessage(vs,`${v$.value.$errors[key]?.$propertyPath} ${v$.value.$errors[key]?.$message}`)
+    }
+    return
+  }
+  addProblem(problem)
+}
+
+watchEffect(() => {
+  if (isSuccess.value)
+    successMessage(vs, 'Problem created successfully')
+  if (isPending.value)
+    loading(vs)
+  if(!isPending.value)
+    vs.loading.close()
+  if (isError.value)
+    errorMessage(vs, error.value)
+})
+
+
 </script>
 
 <style>

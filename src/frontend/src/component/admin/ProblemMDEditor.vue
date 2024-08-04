@@ -32,7 +32,7 @@
   <div class="problem-editor__submit">
     <vs-row vs-type="flex" vs-justify="flex-end" vs-w="12">
       <vs-col vs-type="flex" vs-justify="flex-end" vs-align="center" vs-w="2">
-        <vs-button color="primary" type="border" @click="showOnConsole">Submit</vs-button>
+        <vs-button color="primary" type="border" @click="submit">Submit</vs-button>
       </vs-col>
     </vs-row>
   </div>
@@ -49,7 +49,7 @@ const props = defineProps({
   difficulty: String,
 });
 
-const emit = defineEmits(["update:title", "update:slug", "update:description", "update:testcasesLink", "update:difficulty"]);
+const emit = defineEmits(["update:title", "update:slug", "update:description", "update:testcasesLink", "update:difficulty", "submit:problem"]);
 
 const localTitle = ref(props.title);
 const localSlug = ref(props.slug);
@@ -89,49 +89,51 @@ const updateDifficulty = () => {
   emit("update:difficulty", localDifficulty.value);
 };
 
+
 const applyMarkdown = (action) => {
+  const textarea = document.querySelector('.md-editor__textarea');
+  const start = textarea.selectionStart;
+  const end = textarea.selectionEnd;
+  const currentValue = textarea.value;
+
   switch (action) {
     case "bold":
-      localDescription.value = `**${localDescription.value}**`;
+      textarea.value = `${currentValue.slice(0, start)}****${currentValue.slice(end)}`;
       break;
     case "italic":
-      localDescription.value = `*${localDescription.value}*`;
+      textarea.value = `${currentValue.slice(0, start)}**${currentValue.slice(end)}`;
       break;
     case "underline":
-      localDescription.value = `<u>${localDescription.value}</u>`;
+      textarea.value = `${currentValue.slice(0, start)}<u></u>${currentValue.slice(end)}`;
       break;
     case "bulletedList":
-      localDescription.value = `- ${localDescription.value}`;
+      textarea.value = `${currentValue.slice(0, start)}- ${currentValue.slice(end)}`;
       break;
     case "numberedList":
-      localDescription.value = `1. ${localDescription.value}`;
+      textarea.value = `${currentValue.slice(0, start)}1. ${currentValue.slice(end)}`;
       break;
     case "codeBlock":
-      localDescription.value = `\`\`\`\n${localDescription.value}\n\`\`\``;
+      textarea.value = `${currentValue.slice(0, start)}\`\`\`\n\n\`\`\`${currentValue.slice(end)}`;
       break;
     case "quote":
-      localDescription.value = `> ${localDescription.value}`;
+      textarea.value = `${currentValue.slice(0, start)}> ${currentValue.slice(end)}`;
       break;
     case "link":
-      localDescription.value = `[${localDescription.value}](url)`;
+      textarea.value = `${currentValue.slice(0, start)}[](url)${currentValue.slice(end)}`;
       break;
     case "image":
-      localDescription.value = `![alt text](image_url)`;
+      textarea.value = `${currentValue.slice(0, start)}![alt text](image_url)${currentValue.slice(end)}`;
       break;
     default:
       break;
   }
+  textarea.selectionStart = start + (action === 'bold' ? 4 : 2);
+  textarea.selectionEnd = textarea.selectionStart;
   updateDescription();
 };
 
-const showOnConsole = () => {
-  console.log({
-    title: localTitle.value,
-    slug: localSlug.value,
-    description: localDescription.value,
-    testcasesLink: localTestcasesLink.value,
-    difficulty: localDifficulty.value,
-  });
+const submit = () => {
+  emit("submit:problem");
 };
 
 watch(props, (newProps) => {

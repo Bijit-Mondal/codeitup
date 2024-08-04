@@ -40,6 +40,7 @@ public class DefaultCodeService {
                 .problemId(defaultCodeRequest.getProblemId())
                 .languageId(defaultCodeRequest.getLanguageId())
                 .code(defaultCodeRequest.getCode())
+                .runnerCode(defaultCodeRequest.getRunnerCode())
                 .build();
         defaultCodeRepository.save(defaultCode);
     }
@@ -70,5 +71,13 @@ public class DefaultCodeService {
             throw new ApiRequestExceptionNotFound("Language with id: " + languageId + " not found");
         }
         defaultCodeRepository.deleteByProblemIdAndLanguageId(problemId, languageId);
+    }
+
+    public DefaultCode updateDefaultCode(String problemId, Integer languageId, DefaultCodeRequest defaultCode) {
+        DefaultCode defaultCodeEntity = defaultCodeRepository.findByProblemIdAndLanguageId(problemId, languageId)
+                .orElseThrow(() -> new ApiRequestExceptionNotFound("Default code not found for problemId: " + problemId + ", languageId: " + languageId));
+        defaultCodeEntity.setCode(defaultCode.getCode());
+        defaultCodeEntity.setRunnerCode(defaultCode.getRunnerCode());
+        return defaultCodeRepository.save(defaultCodeEntity);
     }
 }

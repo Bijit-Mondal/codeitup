@@ -27,6 +27,9 @@ public class DefaultCode {
 
     private String code;
 
+    @JsonIgnore
+    private String runnerCode;
+
     @ManyToOne
     @JoinColumn(name = "problemId", insertable = false, updatable = false)
     @JsonIgnore

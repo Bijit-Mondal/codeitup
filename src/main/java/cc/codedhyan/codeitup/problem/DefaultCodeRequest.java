@@ -22,4 +22,8 @@ public class DefaultCodeRequest {
     @NotBlank(message = "Code can't be blank")
     @NotNull(message = "Code can't be null")
     private String code;
+
+    @NotBlank(message = "Code can't be blank")
+    @NotNull(message = "Code can't be null")
+    private String runnerCode;
 }

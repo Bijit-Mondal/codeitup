@@ -27,6 +27,16 @@ public class DefaultCodeController {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping("/{problemId}/{languageId}")
+    public ResponseEntity<?> updateDefaultCode(
+            @PathVariable String problemId,
+            @PathVariable Integer languageId,
+            @RequestBody @Valid DefaultCodeRequest defaultCode
+    ) {
+        log.info("Updating default code for problemId: {}, languageId: {}", problemId, languageId);
+        return ResponseEntity.ok(defaultCodeService.updateDefaultCode(problemId, languageId, defaultCode));
+    }
+
     @GetMapping("/{problemId}")
     public ResponseEntity<List<DefaultCode>> getDefaultCodes(
             @PathVariable String problemId
