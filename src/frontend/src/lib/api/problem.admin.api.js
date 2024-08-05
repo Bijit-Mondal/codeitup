@@ -45,3 +45,14 @@ export const updateProblem = async (slug, data) => {
     }
     return await response.json()
 }
+
+export const toggleProblemStatus = async (slug) => {
+    const response =  await fetchWithAuth(`/api/v1/admin/problem/toggle-hide/${slug}`, {
+        method: 'PUT',
+    });
+    if(!response.ok){
+        const res = await response.json()
+        throw new Error(res.message)
+    }
+    return await response.json()
+}

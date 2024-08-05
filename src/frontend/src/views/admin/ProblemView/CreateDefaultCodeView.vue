@@ -18,7 +18,9 @@
       <div class="code-editor__submit">
         <vs-row vs-type="flex" vs-justify="flex-end" vs-w="12">
           <vs-col vs-type="flex" vs-justify="center" vs-align="center" vs-w="2">
-            <vs-button color="primary" type="border" @click="submit">Add</vs-button>
+            <vs-button color="primary" type="border" @click="handleSubmit">
+              {{ showUpdateButton ? 'Update' : 'Add' }}
+            </vs-button>
           </vs-col>
         </vs-row>
       </div>
@@ -27,8 +29,16 @@
 </template>
 
 <script setup>
-import {onMounted, reactive, watchEffect} from "vue";
+import { computed, onMounted, reactive, watchEffect } from "vue";
+import { useRoute } from "vue-router";
+import { inject } from "vue";
 import Split from 'split.js';
+import CodeEditor from "@/component/CodeEditor.vue";
+import { languageQueries } from "@/lib/tanstack/language.queries";
+import { defaultCodeAdminQueries } from "@/lib/tanstack/defaultCode.admin.queries";
+import { useNotification } from "@/lib/composable/notification";
+import { defaultCodeValidation } from "@/lib/vuelidate/validate.syntax";
+import useVuelidate from "@vuelidate/core";
 
 onMounted(() => {
   Split(['#split-0', '#split-1'], {
@@ -38,59 +48,81 @@ onMounted(() => {
   });
 });
 
-
-import CodeEditor from "@/component/CodeEditor.vue";
-import { languageQueries } from "@/lib/tanstack/language.queries";
-import { defaultCodeAdminQueries } from "@/lib/tanstack/defaultCode.admin.queries";
-import { useRoute } from "vue-router";
+const route = useRoute();
+const problemId = route.params.id;
 
 const { getAllLanguageQuery } = languageQueries();
 const { data: languages } = getAllLanguageQuery();
 
-const { addDefaultCodeMutation } = defaultCodeAdminQueries();
+const {
+  addDefaultCodeMutation,
+  getDefaultCodeByProblemAdminQuery,
+  updateDefaultCodeMutation,
+} = defaultCodeAdminQueries();
+
 const { mutateAsync: addDefaultCode, isError, isPending, isSuccess, error } = addDefaultCodeMutation();
+const { mutateAsync: updateDefaultCode, isError: isUpdateError, isPending: isUpdatePending, isSuccess: isUpdateSuccess, error: updateError } = updateDefaultCodeMutation();
 
-const route = useRoute();
-const problemId = route.params.id;
+const vs = inject('$vs');
+const { successMessage, errorMessage, warningMessage, loading } = useNotification();
 
-import { useNotification } from "@/lib/composable/notification";
-import {inject} from "vue";
-const vs = inject('$vs')
-const { successMessage, errorMessage, warningMessage, loading } = useNotification()
-
-
-import { defaultCodeValidation } from "@/lib/vuelidate/validate.syntax";
-import useVuelidate from "@vuelidate/core";
 const defaultCode = reactive({
-  problemId: problemId,
+  problemId,
   runnerCode: '',
   code: '',
   languageId: 1,
 });
-const v$ = useVuelidate(defaultCodeValidation,defaultCode);
 
-const submit = () => {
-  v$.value.$touch()
-  if(v$.value.$invalid) {
-    for(let key in v$.value.$errors) {
-      warningMessage(vs,`${v$.value.$errors[key]?.$propertyPath} ${v$.value.$errors[key]?.$message}`)
+const { data: existingDefaultCode } = getDefaultCodeByProblemAdminQuery(problemId);
+
+const v$ = useVuelidate(defaultCodeValidation, defaultCode);
+
+const showUpdateButton = computed(() => {
+  return existingDefaultCode.value?.some((code) => code.languageId === defaultCode.languageId);
+});
+
+const updateDefaultCodeState = () => {
+  if (existingDefaultCode.value) {
+    const existingCode = existingDefaultCode.value.find((code) => code.languageId === defaultCode.languageId);
+    if (existingCode) {
+      defaultCode.runnerCode = existingCode.runnerCode;
+      defaultCode.code = existingCode.code;
+    } else {
+      defaultCode.runnerCode = '';
+      defaultCode.code = '';
     }
-    return
   }
-  addDefaultCode(defaultCode)
-}
-watchEffect(() => {
-  if (isSuccess.value)
-    successMessage(vs, 'Default code is added successfully')
-  if (isPending.value)
-    loading(vs)
-  if(!isPending.value)
-    vs.loading.close()
-  if (isError.value)
-    errorMessage(vs, error.value)
-})
+};
 
+watchEffect(() => {
+  updateDefaultCodeState();
+});
+
+const handleSubmit = async () => {
+  v$.value.$touch();
+  if (v$.value.$invalid) {
+    v$.value.$errors.forEach((error) => {
+      warningMessage(vs, `${error.$propertyPath} ${error.$message}`);
+    });
+    return;
+  }
+  if (showUpdateButton.value) {
+    await updateDefaultCode({ problemId, languageId: defaultCode.languageId, data: defaultCode });
+  } else {
+    await addDefaultCode(defaultCode);
+  }
+};
+
+watchEffect(() => {
+  if (isSuccess.value) successMessage(vs, 'Default code is added successfully');
+  if (isUpdateSuccess.value) successMessage(vs, 'Default code is updated successfully');
+  if (isPending.value || isUpdatePending.value) loading(vs);
+  if (!isPending.value && !isUpdatePending.value) vs.loading.close();
+  if (isError.value) errorMessage(vs, error.value);
+  if (isUpdateError.value) errorMessage(vs, updateError.value);
+});
 </script>
+
 
 <style>
 .default-box {

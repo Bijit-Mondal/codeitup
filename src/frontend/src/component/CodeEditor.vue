@@ -64,6 +64,10 @@ watch(() => props.language, (newLanguage) => {
   selectedLanguageMode.value = getLanguageMode(newLanguage);
 });
 
+watch(() => props.content, (newContent) => {
+  localContent.value = newContent;
+});
+
 watch(localLanguage, (newLanguage) => {
   emit('update:language', newLanguage);
   selectedLanguageMode.value = getLanguageMode(newLanguage);

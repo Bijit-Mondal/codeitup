@@ -34,6 +34,18 @@ public class ProblemService {
         return prob;
     }
 
+    public Problem toggleHideProblem(String slug) {
+        Problem prob = problemRepository.findBySlug(slug)
+                .orElseThrow(() -> new ApiRequestExceptionNotFound("Problem with slug: "+slug+" not found"));
+        // if the problem doesn't have default code then it can't be hidden and can't be set to unhidden
+        if(prob.getDefaultCode() == null && !prob.getHidden()){
+            throw new ApiRequestExceptionConflict("Problem with slug: "+slug+" can't be hidden or unhidden");
+        }
+        prob.setHidden(!prob.getHidden());
+        problemRepository.save(prob);
+        return prob;
+    }
+
     public Problem updateProblem(String slug, ProblemRequest problem) {
         Problem prob = problemRepository.findBySlug(slug)
                 .orElseThrow(() -> new ApiRequestExceptionNotFound("Problem with slug: "+slug+" not found"));

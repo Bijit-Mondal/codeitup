@@ -6,7 +6,7 @@
       close-icon="close">
     {{ error }}
   </vs-alert>
-  <table class="table" v-if="!isLoading">
+  <table class="table_admin" v-if="!isLoading">
     <thead v-if="!isError">
     <tr>
       <th>Problem</th>
@@ -86,7 +86,7 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.table {
+.table_admin {
   max-width: 1400px;
   width: 100%;
   border-radius: 5px;
@@ -124,7 +124,7 @@ onUnmounted(() => {
 }
 </style>
 <style>
-.table {
+.table_admin {
   & .vs-button-danger.vs-button-border .vs-button-backgroundx, .vs-button-danger.vs-button-flat .vs-button-backgroundx{
     background: transparent !important;
   }

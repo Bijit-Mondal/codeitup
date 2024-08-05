@@ -27,7 +27,6 @@ public class DefaultCode {
 
     private String code;
 
-    @JsonIgnore
     private String runnerCode;
 
     @ManyToOne

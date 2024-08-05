@@ -46,4 +46,10 @@ public class ProblemAdminController {
         log.info("Updating problem: {}", problem);
         return ResponseEntity.ok(problemService.updateProblem(slug, problem));
     }
+
+    @PutMapping("/toggle-hide/{slug}")
+    public ResponseEntity<?> toggleHideProblem(@PathVariable String slug) {
+        log.info("Toggling hide for problem: {}", slug);
+        return ResponseEntity.ok(problemService.toggleHideProblem(slug));
+    }
 }

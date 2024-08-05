@@ -2,7 +2,11 @@ import { useMutation, useQuery, useQueryClient} from "@tanstack/vue-query";
 
 import { QUERY_KEYS } from "@/lib/api/queryKeys";
 
-import { addDefaultCode, getDefaultCodeByProblem, updateDefaultCode } from "@/lib/api/defaultCode.admin.api";
+import {
+    addDefaultCode,
+    getDefaultCodeByProblem,
+    updateDefaultCode
+} from "@/lib/api/defaultCode.admin.api";
 import {ref} from "vue";
 
 export const defaultCodeAdminQueries = () => {
@@ -39,6 +43,7 @@ export const defaultCodeAdminQueries = () => {
                 queryKey: [QUERY_KEYS.GET_DEFAULT_CODE_BY_PROBLEM_ADMIN, id],
                 queryFn: () => getDefaultCodeByProblem(id)
             })
+
 
         return {
             addDefaultCodeMutation,

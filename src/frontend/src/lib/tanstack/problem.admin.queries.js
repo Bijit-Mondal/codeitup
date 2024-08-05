@@ -1,6 +1,12 @@
 import {useInfiniteQuery, useMutation, useQuery, useQueryClient} from "@tanstack/vue-query";
 
-import { addProblem, getAllProblem, getProblemBySlug, updateProblem } from "@/lib/api/problem.admin.api";
+import {
+    addProblem,
+    getAllProblem,
+    getProblemBySlug,
+    toggleProblemStatus,
+    updateProblem
+} from "@/lib/api/problem.admin.api";
 
 import { QUERY_KEYS } from "@/lib/api/queryKeys";
 
@@ -46,10 +52,21 @@ export const problemAdminQueries = () => {
                 }).then(r => console.log(r))
             }
         });
+
+    const toggleProblemStatusMutation = () =>
+        useMutation({
+            mutationFn: ({ slug, problem }) => toggleProblemStatus(slug, problem),
+            onSuccess: (data) => {
+                queryClient.invalidateQueries({
+                    queryKey: [QUERY_KEYS.GET_PROBLEM_BY_SLUG_ADMIN, data?.slug]
+                }).then(r => console.log(r))
+            }
+        });
     return {
         addProblemMutation,
         getAllProblemAdminQuery,
         getProblemBySlugAdminQuery,
+        toggleProblemStatusMutation,
         updateProblemMutation
     }
 }
