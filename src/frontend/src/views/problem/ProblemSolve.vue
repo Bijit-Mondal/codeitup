@@ -90,7 +90,7 @@ watchEffect(() => {
 
 </script>
 
-<style scoped>
+<style>
 .problem-box {
   margin: 0.5rem;
   background-color: var(--dark);
@@ -105,8 +105,6 @@ watchEffect(() => {
 .code-editor__submit {
   margin-top: 1rem;
 }
-</style>
-<style>
 .gutter {
   background-color: var(--dark);
   background-repeat: no-repeat;
