@@ -25,8 +25,10 @@ public class DefaultCode {
     @Id
     private String problemId;
 
+    @Column(columnDefinition = "LONGTEXT")
     private String code;
 
+    @Column(columnDefinition = "LONGTEXT")
     private String runnerCode;
 
     @ManyToOne

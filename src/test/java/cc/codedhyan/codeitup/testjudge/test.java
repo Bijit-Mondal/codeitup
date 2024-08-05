@@ -1,5 +1,6 @@
 package cc.codedhyan.codeitup.testjudge;
 
+import cc.codedhyan.codeitup.problem.Judge0Response;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +48,7 @@ public class test {
 
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<?> res = restTemplate.exchange(
-                "https://judge0-ce.p.rapidapi.com/submissions/?base64_encoded=false&wait=false",
+                "https://judge0-ce.p.rapidapi.com/submissions/?base64_encoded=false",
                 org.springframework.http.HttpMethod.POST,
                 entity,
                 String.class
@@ -67,16 +68,18 @@ public class test {
 
         HttpEntity<?> entity = new HttpEntity<>(headers);
 
-        String token = "880da855-59a1-4bb9-b22f-0d85d8a3f70c";
+        String token = "e9e23190-a210-4053-8697-40770b976de1";
 
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<?> res = restTemplate.exchange(
+        Judge0Response res = restTemplate.exchange(
                 "https://judge0-ce.p.rapidapi.com/submissions/"+token+"?base64_encoded=false",
                 org.springframework.http.HttpMethod.GET,
                 entity,
-                String.class
-        );
+                Judge0Response.class
+        ).getBody();
         System.out.println(res);
 //        {"language_id":62,"stdout":null,"status_id":6,"stderr":null}
     }
+
+
 }

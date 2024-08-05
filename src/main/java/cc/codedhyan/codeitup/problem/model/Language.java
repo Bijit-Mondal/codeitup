@@ -35,6 +35,10 @@ public class Language {
     @OneToMany(mappedBy = "language",fetch = FetchType.EAGER)
     private List<DefaultCode> defaultCode;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "language", fetch = FetchType.EAGER)
+    private List<Submission> submissions;
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private OffsetDateTime createdAt;

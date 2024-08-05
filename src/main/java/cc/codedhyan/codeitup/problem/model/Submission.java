@@ -37,6 +37,13 @@ public class Submission {
     @JoinColumn(name="userId",insertable = false,updatable = false)
     private User user;
 
+    @Column(updatable = false)
+    private Integer languageId;
+
+    @ManyToOne
+    @JoinColumn(name="languageId",insertable = false,updatable = false)
+    private Language language;
+
     @OneToMany(mappedBy = "submission",fetch = FetchType.EAGER)
     private List<TestCases> testCases;
 

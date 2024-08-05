@@ -36,6 +36,9 @@ public class TestCases {
 
     private Double memory;
 
+    @Enumerated(EnumType.STRING)
+    private TestCasesResult testCasesResult;
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private OffsetDateTime createdAt;

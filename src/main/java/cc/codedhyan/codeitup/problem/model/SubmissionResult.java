@@ -5,15 +5,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum SubmissionResult {
     ACCEPTED("Accepted"),
-    WRONG_ANSWER("Wrong Answer"),
-    TIME_LIMIT_EXCEEDED("Time Limit Exceeded"),
-    MEMORY_LIMIT_EXCEEDED("Memory Limit Exceeded"),
-    RUNTIME_ERROR("Runtime Error"),
-    COMPILATION_ERROR("Compilation Error"),
-    INTERNAL_ERROR("Internal Error");
+    REJECTED("Rejected"),
+    PENDING("Pending");
 
     private final String value;
-
     public String getValue() {
         return value;
     }
