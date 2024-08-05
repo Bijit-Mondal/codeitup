@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import {computed, defineProps, nextTick, watch} from "vue";
+import {computed, defineProps, nextTick, onMounted, watch} from "vue";
 import {marked} from "marked";
 import hljs from 'highlight.js';
 
@@ -34,6 +34,12 @@ const props = defineProps({
 });
 
 const renderedDescription = computed(() => marked(props.description));
+
+onMounted(() => {
+  document.querySelectorAll("pre code").forEach((block) => {
+    hljs.highlightElement(block);
+  });
+});
 
 watch(() => props.description, () => {
   nextTick(() => {

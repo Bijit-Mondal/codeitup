@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient} from "@tanstack/vue-query";
 
-import { QUERY_KEYS } from "@/lib/api/queryKeys";
+import { QUERY_KEYS } from "@/lib/tanstack/queryKeys";
 
 import {
     addDefaultCode,

@@ -23,8 +23,8 @@
           </router-link>
         </td>
         <td>
-          <!-- Published -->
-          <vs-switch color="success" v-model="problem.hidden" vs-icon-on="done" vs-icon-off="close" />
+          <!-- Hidden -->
+          <vs-switch v-if="!isTogglePending" color="success" @click="toggleProblemStatus(problem)" v-model="problem.hidden" vs-icon-on="done" vs-icon-off="close" />
         </td>
         <td class="text-align-center">
           <!-- Edit -->
@@ -54,15 +54,38 @@
 /* eslint-disable */
 import SkeletonList from '@/component/skeleton/SkeletonList.vue'
 
-import {computed, onMounted, onUnmounted, ref} from "vue";
+import {computed, onMounted, onUnmounted, ref, watchEffect} from "vue";
 
 import { problemAdminQueries } from "@/lib/tanstack/problem.admin.queries";
-const { getAllProblemAdminQuery } = problemAdminQueries();
+const { getAllProblemAdminQuery, toggleProblemStatusMutation } = problemAdminQueries();
 const { data, isLoading, isError, error, fetchNextPage, hasNextPage } = getAllProblemAdminQuery();
 const problems = computed(() => {
   return data.value?.pages.flatMap(page => page.content) ?? [];
 });
 
+const {
+  mutateAsync: toggleProblemStatusMutationAsync,
+  isError: isToggleError,
+  error: toggleError,
+  isSuccess:isToggleSuccess,
+  isPending: isTogglePending
+} = toggleProblemStatusMutation();
+
+const toggleProblemStatus = async (problem) => {
+  toggleProblemStatusMutationAsync(problem.slug);
+};
+
+import { useNotification } from "@/lib/composable/notification";
+import {inject} from "vue";
+const vs = inject('$vs')
+const { successMessage, errorMessage } = useNotification()
+
+watchEffect(() => {
+  if (isToggleSuccess.value)
+    successMessage(vs, 'Toggle status successfully!')
+  if (isToggleError.value)
+    errorMessage(vs, toggleError.value)
+})
 
 const loader = ref(null);
 const loadMoreObserver = new IntersectionObserver(entries => {

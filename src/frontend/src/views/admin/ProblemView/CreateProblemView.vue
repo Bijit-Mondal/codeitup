@@ -33,7 +33,7 @@ import {reactive, watchEffect} from "vue";
 import { onMounted } from "vue";
 
 import ProblemMDEditor from "@/component/admin/ProblemMDEditor.vue";
-import  ProblemMDView from "@/component/admin/ProblemMDView.vue";
+import  ProblemMDView from "@/component/ProblemMDView.vue";
 import Split from 'split.js';
 onMounted(() => {
   Split(['#split-0', '#split-1'], {

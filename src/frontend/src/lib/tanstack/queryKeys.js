@@ -5,7 +5,9 @@ export const QUERY_KEYS = {
     GET_DEFAULT_CODE_BY_PROBLEM_ADMIN: 'getDefaultCodeByProblemAdmin',
     GET_DEFAULT_CODE_BY_PROBLEM_AND_LANGUAGE_ADMIN: 'getDefaultCodeByProblemAndLanguageAdmin',
 
-
+    // USER PROBLEM KEYS
+    GET_ALL_PROBLEM: 'getAllProblem',
+    GET_PROBLEM_BY_SLUG: 'getProblemBySlug',
 
     // USER KEYS
     GET_ALL_LANGUAGE: 'getAllLanguage',

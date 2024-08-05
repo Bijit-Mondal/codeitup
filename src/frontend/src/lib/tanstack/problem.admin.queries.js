@@ -8,7 +8,7 @@ import {
     updateProblem
 } from "@/lib/api/problem.admin.api";
 
-import { QUERY_KEYS } from "@/lib/api/queryKeys";
+import { QUERY_KEYS } from "@/lib/tanstack/queryKeys";
 
 export const problemAdminQueries = () => {
 
@@ -55,10 +55,13 @@ export const problemAdminQueries = () => {
 
     const toggleProblemStatusMutation = () =>
         useMutation({
-            mutationFn: ({ slug, problem }) => toggleProblemStatus(slug, problem),
+            mutationFn: (slug) => toggleProblemStatus(slug),
             onSuccess: (data) => {
                 queryClient.invalidateQueries({
                     queryKey: [QUERY_KEYS.GET_PROBLEM_BY_SLUG_ADMIN, data?.slug]
+                }).then(r => console.log(r))
+                queryClient.invalidateQueries({
+                    queryKey: [QUERY_KEYS.GET_ALL_PROBLEM_ADMIN]
                 }).then(r => console.log(r))
             }
         });

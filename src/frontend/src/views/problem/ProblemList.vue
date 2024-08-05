@@ -7,12 +7,7 @@
 <!--    <vs-tabs class="problem-tabs__tabs" alignment="fixed" hover-line hover-text>-->
 <!--      <vs-tab label="Striver's A-Z DSA Sheet">-->
 <!--        <div class="tab-content">-->
-          <Suspense>
             <ProblemList/>
-            <template #fallback>
-              <SkeletonList/>
-            </template>
-          </Suspense>
 <!--        </div>-->
 <!--      </vs-tab>-->
 <!--      <vs-tab label="Striver's SDE Sheet">-->
@@ -39,17 +34,7 @@
   </div>
 </template>
 <script setup>
-// defineAsync component after wait of 20 second
-import { defineAsyncComponent } from "vue";
-import SkeletonList from "../../component/skeleton/SkeletonList"
-
-const ProblemList = defineAsyncComponent(() => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve(import('../../component/problem/ProblemList'))
-    }, 50)
-  })
-})
+import ProblemList from "../../component/problem/ProblemList"
 </script>
 <style scoped>
 .problem-tabs{

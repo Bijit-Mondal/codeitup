@@ -45,7 +45,7 @@ import { reactive, watchEffect, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import Split from 'split.js';
 import ProblemMDEditor from '@/component/admin/ProblemMDEditor.vue';
-import ProblemMDView from '@/component/admin/ProblemMDView.vue';
+import ProblemMDView from '@/component/ProblemMDView.vue';
 import { problemValidation } from '@/lib/vuelidate/validate.syntax';
 import useVuelidate from '@vuelidate/core';
 import { problemAdminQueries } from '@/lib/tanstack/problem.admin.queries';

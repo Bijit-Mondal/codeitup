@@ -38,8 +38,8 @@ public class ProblemService {
         Problem prob = problemRepository.findBySlug(slug)
                 .orElseThrow(() -> new ApiRequestExceptionNotFound("Problem with slug: "+slug+" not found"));
         // if the problem doesn't have default code then it can't be hidden and can't be set to unhidden
-        if(prob.getDefaultCode() == null && !prob.getHidden()){
-            throw new ApiRequestExceptionConflict("Problem with slug: "+slug+" can't be hidden or unhidden");
+        if(prob.getDefaultCode().isEmpty() && prob.getHidden()){
+            throw new ApiRequestExceptionConflict("Problem with slug: "+slug+" can't be published as there is no default code");
         }
         prob.setHidden(!prob.getHidden());
         problemRepository.save(prob);
