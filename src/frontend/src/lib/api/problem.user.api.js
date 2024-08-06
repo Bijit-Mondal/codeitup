@@ -1,7 +1,7 @@
 import { fetchWithAuth } from "./fetchWithAuth";
 
 export const getAllProblem = async (page) => {
-    const response =  await fetchWithAuth(`/api/v1/user/problem?page=${page}`, {
+    const response =  await fetchWithAuth(`/api/v1/open/problem?page=${page}`, {
         method: 'GET',
     });
     if(!response.ok){
@@ -12,7 +12,7 @@ export const getAllProblem = async (page) => {
 }
 
 export const getProblemBySlug = async (slug) => {
-    const response =  await fetchWithAuth(`/api/v1/user/problem/${slug}`, {
+    const response =  await fetchWithAuth(`/api/v1/open/problem/${slug}`, {
         method: 'GET',
     });
     if(!response.ok){

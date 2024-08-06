@@ -1,7 +1,7 @@
 import { fetchWithAuth } from "./fetchWithAuth";
 
 export const getAllLanguage = async () => {
-    const response =  await fetchWithAuth('/api/v1/user/language', {
+    const response =  await fetchWithAuth('/api/v1/open/language', {
         method: 'GET',
     });
     if(!response.ok){
@@ -12,7 +12,7 @@ export const getAllLanguage = async () => {
 }
 
 export const addLanguage = async (data) => {
-    const response =  await fetchWithAuth('/api/v1/user/language', {
+    const response =  await fetchWithAuth('/api/v1/open/language', {
         method: 'POST',
         body: JSON.stringify(data)
     });

@@ -58,6 +58,7 @@ public class test {
 //        {"token":"77bc8875-a2ef-4090-970d-acf82943a9b2"}
 //        {"token":"2feeb058-4ae8-4309-8eed-b7f7962e5b46"}
 //        {"token":"880da855-59a1-4bb9-b22f-0d85d8a3f70c"}
+//        bbb2f2ec-e33c-4b3b-b727-930b4e2bdf0d
     }
     @Test
     public void getSubmission() {
@@ -68,7 +69,7 @@ public class test {
 
         HttpEntity<?> entity = new HttpEntity<>(headers);
 
-        String token = "e9e23190-a210-4053-8697-40770b976de1";
+        String token = "8c88aa7e-f6af-4931-a6fc-6b18843af7ac";
 
         RestTemplate restTemplate = new RestTemplate();
         Judge0Response res = restTemplate.exchange(

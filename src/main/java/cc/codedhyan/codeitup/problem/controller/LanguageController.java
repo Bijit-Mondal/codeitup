@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/user/language")
+@RequestMapping("/api/v1/open/language")
 @Slf4j
 public class LanguageController {
     private final LanguageService languageService;
