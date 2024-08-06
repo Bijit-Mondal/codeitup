@@ -69,7 +69,7 @@ public class test {
 
         HttpEntity<?> entity = new HttpEntity<>(headers);
 
-        String token = "8c88aa7e-f6af-4931-a6fc-6b18843af7ac";
+        String token = "b47d00da-8b90-4811-8bc3-f5ac499c8f5d";
 
         RestTemplate restTemplate = new RestTemplate();
         Judge0Response res = restTemplate.exchange(

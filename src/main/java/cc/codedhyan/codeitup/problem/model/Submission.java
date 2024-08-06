@@ -48,15 +48,18 @@ public class Submission {
     private List<TestCases> testCases;
 
 
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private String submissionId;
-
     @Enumerated(EnumType.STRING)
     private SubmissionResult submissionResult;
 
     private Integer memory;
 
     private Double time;
+
+    @Column(columnDefinition = "TEXT")
+    private String code;
+
+    @Column(columnDefinition = "LONGTEXT")
+    private String fullCode;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)

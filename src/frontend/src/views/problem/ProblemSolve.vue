@@ -15,12 +15,27 @@
   </vs-alert>
   <div class="split problem-box">
     <div id="split-0">
-      <ProblemMDView
-          v-if="!isProblemLoading"
-          :title="problemData?.title"
-          :description="problemData?.description"
-          :difficulty="problemData?.difficulty"
-      />
+      <vs-tabs v-if="!isProblemLoading" class="problem-tabs__tabs" alignment="fixed" hover-line hover-text>
+        <vs-tab label="Problem">
+          <div>
+            <ProblemMDView
+                :title="problemData?.title"
+                :description="problemData?.description"
+                :difficulty="problemData?.difficulty"
+            />
+          </div>
+        </vs-tab>
+        <vs-tab label="Solution">
+          <div>
+            <h1>Solution</h1>
+          </div>
+        </vs-tab>
+        <vs-tab label="Submission">
+          <div>
+            <h1>Submission</h1>
+          </div>
+        </vs-tab>
+      </vs-tabs>
       <div v-else>
         <SkeletonList/>
       </div>
@@ -38,7 +53,7 @@
       <div class="code-editor__submit">
         <vs-row vs-type="flex" vs-justify="flex-end" vs-w="12">
           <vs-col vs-type="flex" vs-justify="center" vs-align="center" vs-w="2">
-            <vs-button color="primary" type="border">
+            <vs-button color="primary" type="border" @click="submitProblem">
               Submit
             </vs-button>
           </vs-col>
@@ -75,6 +90,7 @@ const { data: languages, isError: isLanguageGettingError, error: languageGetting
 const submissionCode = reactive({
   code : "",
   languageId : 1,
+  problemSlug : slug
 })
 
 watchEffect(() => {
@@ -88,6 +104,34 @@ watchEffect(() => {
   }
 })
 
+import { submissionQueries } from "@/lib/tanstack/submission.queries";
+const { makeSubmissionMutation } = submissionQueries();
+
+import { useNotification } from "@/lib/composable/notification";
+import {inject} from "vue";
+const vs = inject('$vs')
+const { successMessage, errorMessage, loading } = useNotification()
+
+const {
+  mutate: makeSubmission,
+  isPending :isSubmissionPending,
+  isSuccess: isSubmissionSuccess,
+  isError: isSubmissionError,
+  error: submissionError
+} = makeSubmissionMutation();
+const submitProblem = () => {
+  makeSubmission(submissionCode);
+}
+watchEffect(() => {
+  if (isSubmissionSuccess.value)
+    successMessage(vs, 'Submission Made Successfully')
+  if (isSubmissionPending.value)
+    loading(vs)
+  if(!isSubmissionPending.value)
+    vs.loading.close()
+  if (isSubmissionError.value)
+    errorMessage(vs, submissionError.value)
+})
 </script>
 
 <style>

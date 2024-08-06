@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum TestCasesResult {
+    PENDING("Pending"),
     ACCEPTED("Accepted"),
     WRONG_ANSWER("Wrong Answer"),
     TIME_LIMIT_EXCEEDED("Time Limit Exceeded"),

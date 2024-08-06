@@ -73,12 +73,12 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             }
             filterChain.doFilter(request, response);
         }catch (Exception e) {
-            log.error("Error in JWTAuthenticationFilter", e);
+//            log.error("Error in JWTAuthenticationFilter", e);
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             ApiException errorResponse = ApiException.builder()
                     .httpStatus(HttpStatus.UNAUTHORIZED)
-                    .message("Unauthorized, you aren't logged in or your session has expired")
+                    .message(e.getMessage())
                     .build();
             ObjectMapper mapper = new ObjectMapper();
             try {

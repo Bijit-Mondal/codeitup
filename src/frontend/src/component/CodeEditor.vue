@@ -97,7 +97,7 @@ const theme = ref(themes.value[0].value);
   margin-bottom: 0.5rem;
 }
 .code-editor > .code-editor__ace {
-  height: 62vh;
+  height: 75vh;
 }
 </style>
 

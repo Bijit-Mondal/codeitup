@@ -1,5 +1,6 @@
 package cc.codedhyan.codeitup.config;
 
+import cc.codedhyan.codeitup.exception.ApiRequestExceptionBadRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -70,10 +71,8 @@ public class SecurityConfiguration {
                                 .addLogoutHandler(logoutHandler)
                                 .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
                 )
-                .exceptionHandling(ex -> ex.authenticationEntryPoint((req, res, exception) -> {
-                    res.sendError(
-                            HttpServletResponse.SC_BAD_REQUEST,
-                            exception.getMessage());
+                .exceptionHandling(ex -> ex.accessDeniedHandler((req, res, exception) -> {
+                    throw new ApiRequestExceptionBadRequest("Access Denied, You are not authorized to access this resource.");
                 }))
         ;
 

@@ -4,13 +4,8 @@ import cc.codedhyan.codeitup.exception.ApiInternalServerErrorException;
 import cc.codedhyan.codeitup.exception.ApiRequestExceptionNotFound;
 import cc.codedhyan.codeitup.problem.SubmissionRequest;
 import cc.codedhyan.codeitup.problem.SubmissionResponse;
-import cc.codedhyan.codeitup.problem.model.DefaultCode;
-import cc.codedhyan.codeitup.problem.model.Language;
-import cc.codedhyan.codeitup.problem.model.Problem;
-import cc.codedhyan.codeitup.problem.repository.DefaultCodeRepository;
-import cc.codedhyan.codeitup.problem.repository.LanguageRepository;
-import cc.codedhyan.codeitup.problem.repository.ProblemRepository;
-import cc.codedhyan.codeitup.problem.repository.SubmissionRepository;
+import cc.codedhyan.codeitup.problem.model.*;
+import cc.codedhyan.codeitup.problem.repository.*;
 import cc.codedhyan.codeitup.user.model.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -19,13 +14,13 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +36,7 @@ public class SubmissionService {
     private final SubmissionRepository submissionRepository;
     private final LanguageRepository languageRepository;
     private final ProblemRepository problemRepository;
+    private final TestCasesRepository testCasesRepository;
 
     public SubmissionResponse createSubmission(SubmissionRequest request) {
         User user =  (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -51,12 +47,62 @@ public class SubmissionService {
         Language language = languageRepository.findById(request.getLanguageId())
                 .orElseThrow(() -> new ApiRequestExceptionNotFound("Language not found"));
         String fullCode = defaultCode.getRunnerCode().replace("##USER_CODE##", request.getCode());
-        ObjectNode judge0SubmissionJson = createJudge0ApiNode(problem.getTestCases(), language.getJudge0id(), fullCode);
-
-        return null;
+        String judge0SubmissionRequest = createJudge0ApiNode(problem.getTestCases(), language.getJudge0id(), fullCode);
+        String[] tokens = submitToJudge0(judge0SubmissionRequest);
+        Submission submission = Submission.builder()
+                .userId(user.getUser_id())
+                .problemId(problem.getId())
+                .languageId(request.getLanguageId())
+                .submissionResult(SubmissionResult.PENDING)
+                .code(request.getCode())
+                .fullCode(fullCode)
+                .build();
+        Submission savedSubmission = submissionRepository.save(submission);
+        List<TestCases> testCases = new ArrayList<>();
+        for(int i=0;i<tokens.length;i++){
+            TestCases tc = TestCases.builder()
+                    .submissionId(savedSubmission.getId())
+                    .judge0TrackingId(tokens[i])
+                    .testCasesResult(TestCasesResult.PENDING)
+                    .ind(i)
+                    .build();
+            testCases.add(tc);
+        }
+        testCasesRepository.saveAll(testCases);
+        return SubmissionResponse.builder()
+                .submissionId(savedSubmission.getId())
+                .message("Submission made successfully")
+                .build();
     }
 
-    private ObjectNode createJudge0ApiNode(String testCasesURL, Integer judge0id, String fullCode) {
+    private String[] submitToJudge0(String judge0SubmissionRequest){
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.set("x-rapidapi-key",RAPIDAPI_KEY);
+            headers.set("x-rapidapi-host",RAPIDAPI_HOST);
+            HttpEntity<String> entity = new HttpEntity<>(judge0SubmissionRequest, headers);
+            ResponseEntity<String> response = restTemplate.exchange(
+                    "https://"+RAPIDAPI_HOST+"/submissions/batch?base64_encoded=false",
+                    HttpMethod.POST,
+                    entity,
+                    String.class
+            );
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode responseBody = mapper.readTree(response.getBody());
+            ArrayNode tokensArray = (ArrayNode) responseBody;
+            String[] tokens = new String[tokensArray.size()];
+            for (int i = 0; i < tokensArray.size(); i++) {
+                tokens[i] = tokensArray.get(i).get("token").asText();
+            }
+            return tokens;
+        }catch (JsonProcessingException e) {
+            throw new ApiInternalServerErrorException("Error while parsing response from Judge0",e);
+        }
+    }
+
+    private String createJudge0ApiNode(String testCasesURL, Integer judge0id, String fullCode) {
         JsonNode testCases = getTestCases(testCasesURL);
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode judge0ApiNode = mapper.createObjectNode();
@@ -73,7 +119,7 @@ public class SubmissionService {
             submissionNode.put("stdin", input);
             submissionNode.put("expected_output", output);
         }
-        return judge0ApiNode;
+        return judge0ApiNode.toString();
     }
 
     private JsonNode getTestCases (String raw) {

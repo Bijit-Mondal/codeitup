@@ -149,11 +149,14 @@ const getDifficultyColor = (difficulty) => {
   color: var(--dark) !important;
 }
 td {
-  & .vs-chip-success.bg-chip-transparent, .vs-chip-danger.bg-chip-transparent {
+  & .vs-chip-success.bg-chip-transparent, .vs-chip-danger.bg-chip-transparent, .vs-chip-primary.bg-chip-transparent {
     float: none;
     margin: 0 auto;
     text-align: center;
     width: 40px;
+  }
+& .vs-chip-primary.bg-chip-transparent {
+    width: 75px;
   }
 }
 </style>

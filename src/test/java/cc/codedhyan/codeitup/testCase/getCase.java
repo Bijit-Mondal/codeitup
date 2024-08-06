@@ -16,7 +16,7 @@ public class getCase {
 
     @Test
     public void getRawFileAsJson () throws JsonProcessingException {
-        String raw = "https://raw.githubusercontent.com/Bijit-Mondal/codeitup-problems/main/n-meetings/test_cases.json";
+        String raw = "https://raw.githubusercontent.com/Bijit-Mondal/codeitup-problems/main/ip_validate/test_cases.json";
         // get the file as json object use the raw url and jackson library
         // Create a RestTemplate instance
         RestTemplate restTemplate = new RestTemplate();
