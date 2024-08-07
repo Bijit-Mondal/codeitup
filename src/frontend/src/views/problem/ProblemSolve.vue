@@ -53,7 +53,7 @@
       <div class="code-editor__submit">
         <vs-row vs-type="flex" vs-justify="flex-end" vs-w="12">
           <vs-col vs-type="flex" vs-justify="center" vs-align="center" vs-w="2">
-            <vs-button color="primary" type="border" @click="submitProblem">
+            <vs-button color="primary" type="border" :disabled="isDrawerOpen" @click="submitProblem">
               Submit
             </vs-button>
           </vs-col>
@@ -61,13 +61,19 @@
       </div>
     </div>
   </div>
+  <Drawer :is-open="isDrawerOpen" @update:isOpen="isDrawerOpen = $event">
+    <TestCaseResult :test-cases="testCases"/>
+  </Drawer>
 </template>
 <script setup>
-
 /* eslint-disable */
-import {onMounted, reactive, watchEffect} from "vue"
+import {defineAsyncComponent, onMounted, reactive, ref, watchEffect} from "vue"
 import Split from 'split.js'
 import { useRoute } from 'vue-router';
+import Drawer from '@/component/base/DrawerComponent.vue';
+
+const TestCaseResult = defineAsyncComponent(()=> import("@/component/problem/TestCaseResult.vue"))
+
 onMounted(() => {
   Split(['#split-0', '#split-1'],
       {
@@ -111,6 +117,7 @@ const { makeSubmissionMutation } = submissionQueries();
 
 import { useNotification } from "@/lib/composable/notification";
 import {inject} from "vue";
+import {getSubmission} from "@/lib/api/submission.api";
 const vs = inject('$vs')
 const { successMessage, errorMessage, loading } = useNotification()
 
@@ -122,13 +129,45 @@ const {
   error: submissionError
 } = makeSubmissionMutation();
 
+const isDrawerOpen = ref(false);
+let testCases = ref([]);
 
 const submitProblem = () => {
-  makeSubmission(submissionCode);
+  makeSubmission(submissionCode, {
+    onSuccess(data) {
+      isDrawerOpen.value = true;
+      pollWithBackOff(data.submissionId, 10);
+    },
+  });
+
 }
+
+// Idea taken from Harkirat Singh
+const pollWithBackOff = async (id,retries) =>{
+  if(retries === 0){
+    errorMessage(vs, "Not able to get status. See Submissions")
+    return
+  }
+  const response = await getSubmission(id)
+  if(response.submissionResult === "PENDING"){
+    testCases.value = response.testCases
+    console.log(testCases.value)
+    await new Promise((resolve) => setTimeout(resolve, 2.5 * 1000));
+    pollWithBackOff(id,retries-1)
+  } else {
+    if(response.submissionResult === "ACCEPTED"){
+      successMessage(vs, "Accepted!")
+      testCases.value = response.testCases
+    } else if(response.submissionResult === "REJECTED"){
+      errorMessage(vs, "Not Accepted!")
+      testCases.value = response.testCases
+    }
+  }
+}
+
 watchEffect(() => {
   if (isSubmissionSuccess.value)
-    successMessage(vs, 'Submission Made Successfully')
+    successMessage(vs, 'Evaluation starts...')
   if (isSubmissionPending.value)
     loading(vs)
   if(!isSubmissionPending.value)

@@ -11,3 +11,12 @@ export const makeSubmission = async (data) => {
     }
     return response.json()
 }
+
+export const getSubmission = async (id) => {
+    const response =  await fetchWithAuth(`/api/v1/user/submission/${id}`);
+    if(!response.ok){
+        const res = await response.json()
+        throw new Error(res.message)
+    }
+    return response.json()
+}

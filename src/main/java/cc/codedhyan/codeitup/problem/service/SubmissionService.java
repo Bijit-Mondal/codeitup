@@ -143,4 +143,9 @@ public class SubmissionService {
             throw new ApiInternalServerErrorException("Error while parsing test cases",e);
         }
     }
+
+    public Submission getSubmission(String submissionId) {
+        return submissionRepository.findById(submissionId)
+                .orElseThrow(() -> new ApiRequestExceptionNotFound("Submission not found"));
+    }
 }

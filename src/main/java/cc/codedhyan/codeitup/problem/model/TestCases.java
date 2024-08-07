@@ -1,5 +1,6 @@
 package cc.codedhyan.codeitup.problem.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,6 +28,7 @@ public class TestCases {
 
     @ManyToOne
     @JoinColumn(name = "submissionId", insertable = false, updatable = false)
+    @JsonIgnore
     private Submission submission;
 
     @Column(unique = true)
