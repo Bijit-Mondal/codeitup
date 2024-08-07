@@ -9,7 +9,7 @@ import lombok.*;
 public class Judge0Response {
     private String stdout;
     private String time;
-    private int memory;
+    private Integer memory;
     private String stderr;
     private String token;
     private String compile_output;

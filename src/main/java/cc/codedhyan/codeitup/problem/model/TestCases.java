@@ -34,7 +34,7 @@ public class TestCases {
 
     private String time;
 
-    private Double memory;
+    private Integer memory;
 
     @Enumerated(EnumType.STRING)
     private TestCasesResult testCasesResult;

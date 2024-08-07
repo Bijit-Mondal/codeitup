@@ -27,8 +27,8 @@ public class test {
     public void submission () {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("x-rapidapi-key",RAPIDAPI_KEY);
-        headers.set("x-rapidapi-host",RAPIDAPI_HOST);
+        headers.set("X-Auth-Token",RAPIDAPI_KEY);
+//        headers.set("x-rapidapi-host",RAPIDAPI_HOST);
 
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode rootNode = mapper.createObjectNode();
@@ -41,14 +41,14 @@ public class test {
             }
         """;
         rootNode.put("source_code", code);
-        rootNode.put("expected_output", "Hello, World");
+        rootNode.put("expected_output", "Hello, World!");
         String requestBody = rootNode.toString();
         System.out.println(requestBody);
         HttpEntity<?> entity = new HttpEntity<>(requestBody,headers);
 
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<?> res = restTemplate.exchange(
-                "https://judge0-ce.p.rapidapi.com/submissions/?base64_encoded=false",
+                "http://"+RAPIDAPI_HOST+"/submissions/?base64_encoded=false",
                 org.springframework.http.HttpMethod.POST,
                 entity,
                 String.class
@@ -64,16 +64,16 @@ public class test {
     public void getSubmission() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("x-rapidapi-key",RAPIDAPI_KEY);
-        headers.set("x-rapidapi-host",RAPIDAPI_HOST);
+        headers.set("X-Auth-Token",RAPIDAPI_KEY);
+//        headers.set("x-rapidapi-host",RAPIDAPI_HOST);
 
         HttpEntity<?> entity = new HttpEntity<>(headers);
 
-        String token = "b47d00da-8b90-4811-8bc3-f5ac499c8f5d";
+        String token = "177d3baf-653d-43ad-b696-ede241e3f354";
 
         RestTemplate restTemplate = new RestTemplate();
         Judge0Response res = restTemplate.exchange(
-                "https://judge0-ce.p.rapidapi.com/submissions/"+token+"?base64_encoded=false",
+                "http://"+RAPIDAPI_HOST+"/submissions/"+token+"?base64_encoded=false",
                 org.springframework.http.HttpMethod.GET,
                 entity,
                 Judge0Response.class

@@ -63,6 +63,8 @@
   </div>
 </template>
 <script setup>
+
+/* eslint-disable */
 import {onMounted, reactive, watchEffect} from "vue"
 import Split from 'split.js'
 import { useRoute } from 'vue-router';
@@ -119,6 +121,8 @@ const {
   isError: isSubmissionError,
   error: submissionError
 } = makeSubmissionMutation();
+
+
 const submitProblem = () => {
   makeSubmission(submissionCode);
 }

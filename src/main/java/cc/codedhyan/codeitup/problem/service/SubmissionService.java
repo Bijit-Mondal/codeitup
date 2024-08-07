@@ -80,11 +80,10 @@ public class SubmissionService {
             RestTemplate restTemplate = new RestTemplate();
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.set("x-rapidapi-key",RAPIDAPI_KEY);
-            headers.set("x-rapidapi-host",RAPIDAPI_HOST);
+            headers.set("X-Auth-Token",RAPIDAPI_KEY);
             HttpEntity<String> entity = new HttpEntity<>(judge0SubmissionRequest, headers);
             ResponseEntity<String> response = restTemplate.exchange(
-                    "https://"+RAPIDAPI_HOST+"/submissions/batch?base64_encoded=false",
+                    "http://"+RAPIDAPI_HOST+"/submissions/batch?base64_encoded=false",
                     HttpMethod.POST,
                     entity,
                     String.class
@@ -118,6 +117,7 @@ public class SubmissionService {
             submissionNode.put("source_code", fullCode);
             submissionNode.put("stdin", input);
             submissionNode.put("expected_output", output);
+            submissionNode.put("callback_url","http://45.79.123.242:8080/api/v1/open/submission-callback");
         }
         return judge0ApiNode.toString();
     }
