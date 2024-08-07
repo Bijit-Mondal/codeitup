@@ -30,4 +30,12 @@ public class SubmissionController {
         log.info("Getting submission: {}", submissionId);
         return ResponseEntity.ok(submissionService.getSubmission(submissionId));
     }
+
+    @GetMapping("/problem/{problemSlug}")
+    public ResponseEntity<?> getSubmissions(
+            @PathVariable String problemSlug
+    ){
+        log.info("Getting all submissions");
+        return ResponseEntity.ok(submissionService.getSubmissions(problemSlug));
+    }
 }

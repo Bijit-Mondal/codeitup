@@ -2,6 +2,7 @@ package cc.codedhyan.codeitup.problem.service;
 
 import cc.codedhyan.codeitup.exception.ApiInternalServerErrorException;
 import cc.codedhyan.codeitup.exception.ApiRequestExceptionNotFound;
+import cc.codedhyan.codeitup.problem.SubmissionListResponse;
 import cc.codedhyan.codeitup.problem.SubmissionRequest;
 import cc.codedhyan.codeitup.problem.SubmissionResponse;
 import cc.codedhyan.codeitup.problem.model.*;
@@ -147,5 +148,22 @@ public class SubmissionService {
     public Submission getSubmission(String submissionId) {
         return submissionRepository.findById(submissionId)
                 .orElseThrow(() -> new ApiRequestExceptionNotFound("Submission not found"));
+    }
+
+    public List<SubmissionListResponse> getSubmissions(String problemSlug) {
+        Problem problem = problemRepository.findBySlugAndHiddenFalse(problemSlug)
+                .orElseThrow(() -> new ApiRequestExceptionNotFound("Problem not found"));
+        List<Submission> submissions = submissionRepository.findAllByProblemId(problem.getId());
+        List<SubmissionListResponse> submissionListResponses = new ArrayList<>();
+        for(Submission submission:submissions){
+            submissionListResponses.add(SubmissionListResponse.builder()
+                    .submissionId(submission.getId())
+                    .language(submission.getLanguage().getName())
+                    .time(submission.getCreatedAt())
+                    .profile(submission.getUser().getProfile())
+                    .submissionResult(submission.getSubmissionResult())
+                    .build());
+        }
+        return submissionListResponses;
     }
 }

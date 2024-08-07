@@ -20,3 +20,13 @@ export const getSubmission = async (id) => {
     }
     return response.json()
 }
+
+// need to improve this endpoint + pagination
+export const getAllSubmissionsByProblemSlug = async (slug) => {
+    const response =  await fetchWithAuth(`/api/v1/user/submission/problem/${slug}`);
+    if(!response.ok){
+        const res = await response.json()
+        throw new Error(res.message)
+    }
+    return response.json()
+}

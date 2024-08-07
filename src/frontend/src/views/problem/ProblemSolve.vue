@@ -27,13 +27,16 @@
         </vs-tab>
         <vs-tab label="Solution">
           <div>
-            <h1>Solution</h1>
+            <vs-alert
+                title="Upcoming..."
+                color="primary"
+                close-icon="close">
+              Not Yet Implemented
+            </vs-alert>
           </div>
         </vs-tab>
         <vs-tab label="Submission">
-          <div>
-            <h1>Submission</h1>
-          </div>
+          <SubmissionList/>
         </vs-tab>
       </vs-tabs>
       <div v-else>
@@ -73,6 +76,7 @@ import { useRoute } from 'vue-router';
 import Drawer from '@/component/base/DrawerComponent.vue';
 
 const TestCaseResult = defineAsyncComponent(()=> import("@/component/problem/TestCaseResult.vue"))
+const SubmissionList = defineAsyncComponent(()=> import("@/component/problem/SubmissionList.vue"))
 
 onMounted(() => {
   Split(['#split-0', '#split-1'],
