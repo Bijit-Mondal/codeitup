@@ -12,31 +12,32 @@ spring:
     database-platform: org.hibernate.dialect.MySQLDialect
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DATABASE}
-    username: ${MYSQL_USER}
-    password: ${MYSQL_PASSWORD}
+    jdbc:mysql://localhost:3306/CodeitUp
+    url: jdbc:mysql://mysqldb:3306/${MYSQL_DATABASE}
+    username: root
+    password: ${MYSQL_ROOT_PASSWORD}
   mail:
     properties:
       mail:
         smtp:
           socketFactory:
-            port: ${MAIL_PORT}
+            port: ${SMTP_PORT}
             class: javax.net.ssl.SSLSocketFactory
             fallback: 'false'
           auth: 'true'
-    host: ${MAIL_HOST}
-    username: ${MAIL_USERNAME}
-    password: ${MAIL_PASSWORD}
+    host: ${SMTP_SERVER}
+    username: ${SMTP_USER}
+    password: ${SMTP_PASSWORD}
 
 application:
   security:
     github:
       pat: ${GITHUB_PAT}
     rapidapi:
-      key: ${RAPIDAPI_KEY}
-      host: ${RAPIDAPI_HOST}
+      key: ${JUDGE0_KEY}
+      host: ${JUDGE0_HOST}
     jwt:
-      secret-key: ${JWT_SECRET_KEY:c05dabc15dbe85788b06280004aa3dfb853cdc52f01f07d98c62b266ab243ae0}
+      secret-key: ${JWT_SECRET_KEY}
       expiration: 86400000 # a day
       refresh-token:
         expiration: 604800000 # 7 days

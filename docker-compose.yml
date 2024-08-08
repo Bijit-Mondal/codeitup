@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+  mysqldb:
+    image: mysql:5.7
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    volumes:
+      - db:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - codeitup
+
+  codeitup:
+    image: registry.gitlab.com/bijit-mondal/codeitup:3cfa178db4890d9f966f6897f6a639e7ce61842b
+    container_name: codeitup
+    restart: on-failure
+    env_file: ./.env
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysqldb
+    networks:
+      - codeitup
+
+networks:
+  codeitup:
+
+volumes:
+  db:
