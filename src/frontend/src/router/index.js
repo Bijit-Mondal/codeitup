@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView'
+import {useAuthStore} from "@/lib/store/auth.store";
 
 const routes = [
   {
@@ -38,7 +39,19 @@ const routes = [
     ]
   },
   {
+    path: "/profile",
+    meta: { requiresAuth: true },
+    name: 'profile',
+    component: () => import("../views/profile/ProfileView"),
+  },
+  {
+    path: "/contest",
+    name: 'contest',
+    component: () => import("../views/contest/ContestView"),
+  },
+  {
     path: "/admin",
+    meta: { requiresAuth: true },
     redirect: { name: 'admin-home' },
     component: () => import("../views/admin/AdminView"),
     children: [
@@ -74,6 +87,15 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+})
+
+router.beforeEach((to, from, next) => {
+    const authStore = useAuthStore();
+    if(to.meta.requiresAuth && !authStore.isLoggedIn) {
+        next({ name: 'auth' });
+    } else {
+        next();
+    }
 })
 
 export default router

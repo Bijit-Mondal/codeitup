@@ -17,7 +17,7 @@
       </vs-navbar-item>
       <vs-navbar-item index="3">
         <router-link v-if="!authStore.isLoggedIn" :to="{ name:'auth' }">Login</router-link>
-        <router-link v-else :to="{ name:'auth' }">
+        <router-link v-else :to="{ name:'profile' }">
           <vs-avatar size="small" />
         </router-link>
       </vs-navbar-item>
@@ -56,7 +56,7 @@ const indexActive = ref(0);
 const navbarItems = ref([
   { title: 'Home', routeName: 'home' },
   { title: 'Problems', routeName: 'problem' },
-  { title: 'Contest', routeName: 'auth' },
+  { title: 'Contest', routeName: 'contest' },
 ]);
 
 watchEffect(() => {

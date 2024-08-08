@@ -7,7 +7,6 @@ export const useAuthStore = defineStore('auth', () => {
     const refreshToken = ref(null)
     const isLoggedIn = computed(() => !!accessToken.value)
     const login = (data) => {
-        console.log(data)
         accessToken.value = data.access_token
         refreshToken.value = data.refresh_token
     }
