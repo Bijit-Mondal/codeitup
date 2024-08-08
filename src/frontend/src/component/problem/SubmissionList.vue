@@ -28,7 +28,7 @@
             <td>{{ submission.profile }}</td>
             <td>{{ submission.language }}</td>
             <td>
-              <vs-button @click="popupActivo=true"  color="primary" type="flat" size="small">View Code</vs-button>
+              <vs-button @click="openPopup(submission.submissionId)"  color="primary" type="flat" size="small">View Code</vs-button>
             </td>
           </tr>
         </tbody>
@@ -37,11 +37,7 @@
         <SkeletonList/>
       </div>
     </div>
-    <vs-popup class="holamundo"  title="Lorem ipsum dolor sit amet" v-model:active="popupActivo">
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-      </p>
-    </vs-popup>
+    <SubmissionCode title="Submission Code" :isActive="popupActivo" :submissionId="activeSubmissionId"/>
   </div>
 </template>
 <script setup>
@@ -53,13 +49,19 @@ const { getAllSubmissionByProblemSlug } = submissionQueries()
 import SkeletonList from "@/component/skeleton/SkeletonList"
 
 import { dateFormat } from "@/lib/composable/dateFormat"
-import {ref} from "vue";
+import {defineAsyncComponent, ref} from "vue";
 
 const route = useRoute()
 const problemSlug = route.params.slug
 const { data: submissions, isLoading, isError, error } = getAllSubmissionByProblemSlug(problemSlug)
 
+const SubmissionCode = defineAsyncComponent(()=> import("@/component/problem/SubmissionCode.vue"))
 const popupActivo = ref(false)
+const activeSubmissionId = ref("");
+const openPopup = (submissionId) => {
+  popupActivo.value = !popupActivo.value
+  activeSubmissionId.value = submissionId
+}
 
 </script>
 <style scoped>
