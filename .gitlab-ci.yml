@@ -15,4 +15,7 @@ build_job:
     docker login registry.gitlab.com -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
     docker build -t registry.gitlab.com/bijit-mondal/codeitup:$CI_COMMIT_SHA .
     docker push registry.gitlab.com/bijit-mondal/codeitup:$CI_COMMIT_SHA
+  only:
+    - deploy
+
 
