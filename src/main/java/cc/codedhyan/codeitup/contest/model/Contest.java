@@ -30,10 +30,10 @@ public class Contest {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
 
-    @Column(nullable = false, columnDefinition = "TIMESTAMP")
+    @Column(nullable = false, columnDefinition = "DATETIME")
     private LocalDateTime startTime;
 
-    @Column(nullable = false, columnDefinition = "TIMESTAMP")
+    @Column(nullable = false, columnDefinition = "DATETIME")
     private LocalDateTime endTime;
 
     @Column(nullable = false)
