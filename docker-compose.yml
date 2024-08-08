@@ -16,7 +16,7 @@ services:
       - codeitup
 
   codeitup:
-    image: registry.gitlab.com/bijit-mondal/codeitup:3cfa178db4890d9f966f6897f6a639e7ce61842b
+    image: registry.gitlab.com/bijit-mondal/codeitup:7b0242b65ff7f1e007010ecd6770f0441db8a6ac
     container_name: codeitup
     restart: on-failure
     env_file: ./.env

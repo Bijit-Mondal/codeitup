@@ -21,4 +21,4 @@ MYSQL_ROOT_PASSWORD=
 
 Fill this with your credentials `JUDGE0_KEY` with the judge0 key you set in judge0.conf while 
 configuring judge0.
-4. Run `docker-compose up -d` to start the server in detached mode
+4. Run `docker compose up -d` to start the server in detached mode
