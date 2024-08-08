@@ -14,16 +14,16 @@ build_job:
   script: |
     echo "Building the application"
     docker login registry.gitlab.com -u $DOCER_USERNAME -p $DOCKER_PASSWORD
-    docker build -t registry.gitlab.com/bijit-mondal/codeitup:0.0.1 .
-    docker push registry.gitlab.com/bijit-mondal/codeitup:0.0.1
+    docker build -t registry.gitlab.com/bijit-mondal/codeitup:$CI_COMMIT_SHA .
+    docker push registry.gitlab.com/bijit-mondal/codeitup:$CI_COMMIT_SHA
 
 deploy_job:
   stage: deploy
   script: |
     echo "Deploying the application"
-    docker login registry.gitlab.com -u $DOCER_USERNAME -p $DOCKER_PASSWORD
-    docker pull registry.gitlab.com/bijit-mondal/codeitup:0.0.1
-    docker run -d -p 8080:8080 registry.gitlab.com/bijit-mondal/codeitup:0.0.1
+    docker login registry.gitlab.com -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+    docker pull registry.gitlab.com/bijit-mondal/codeitup:$CI_COMMIT_SHA
+    docker run -d -p 8080:8080 registry.gitlab.com/bijit-mondal/codeitup:$CI_COMMIT_SHA
   tags:
     - linode-deploy-runner
   only:
