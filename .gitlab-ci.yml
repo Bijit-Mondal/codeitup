@@ -7,7 +7,7 @@ default:
 
 stages:
   - build
-  - deploy
+#  - deploy
 
 build_job:
   stage: build
