@@ -2,10 +2,7 @@ package cc.codedhyan.codeitup.problem.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -29,6 +26,7 @@ public class TestCases {
     @ManyToOne
     @JoinColumn(name = "submissionId", insertable = false, updatable = false)
     @JsonIgnore
+    @ToString.Exclude
     private Submission submission;
 
     @Column(unique = true)

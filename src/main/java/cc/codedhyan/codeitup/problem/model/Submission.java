@@ -3,10 +3,7 @@ package cc.codedhyan.codeitup.problem.model;
 import cc.codedhyan.codeitup.user.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -29,6 +26,7 @@ public class Submission {
 
     @ManyToOne
     @JsonIgnore
+    @ToString.Exclude
     @JoinColumn(name="problemId",insertable = false,updatable = false)
     private Problem problem;
 
@@ -37,6 +35,7 @@ public class Submission {
 
     @ManyToOne
     @JsonIgnore
+    @ToString.Exclude
     @JoinColumn(name="userId",insertable = false,updatable = false)
     private User user;
 
@@ -45,6 +44,7 @@ public class Submission {
 
     @ManyToOne
     @JsonIgnore
+    @ToString.Exclude
     @JoinColumn(name="languageId",insertable = false,updatable = false)
     private Language language;
 

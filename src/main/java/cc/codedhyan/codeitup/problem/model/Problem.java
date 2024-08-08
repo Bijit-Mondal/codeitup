@@ -56,10 +56,12 @@ public class Problem {
     private List<ContestProblem> contests;
 
     @JsonIgnore
+    @ToString.Exclude
     @OneToMany(mappedBy = "problem", fetch = FetchType.EAGER)
     private List<ContestSubmission> tags;
 
     @JsonIgnore
+    @ToString.Exclude
     @OneToMany(mappedBy = "problem", fetch = FetchType.EAGER)
     private List<Submission> submissions;
 
