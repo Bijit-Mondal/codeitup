@@ -1,0 +1,48 @@
+spring:
+  mvc:
+    static-path-pattern: /app/**
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DATABASE}
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
+  mail:
+    properties:
+      mail:
+        smtp:
+          socketFactory:
+            port: ${MAIL_PORT}
+            class: javax.net.ssl.SSLSocketFactory
+            fallback: 'false'
+          auth: 'true'
+    host: ${MAIL_HOST}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+
+application:
+  security:
+    github:
+      pat: ${GITHUB_PAT}
+    rapidapi:
+      key: ${RAPIDAPI_KEY}
+      host: ${RAPIDAPI_HOST}
+    jwt:
+      secret-key: ${JWT_SECRET_KEY:c05dabc15dbe85788b06280004aa3dfb853cdc52f01f07d98c62b266ab243ae0}
+      expiration: 86400000 # a day
+      refresh-token:
+        expiration: 604800000 # 7 days
+
+logging:
+  level:
+    org:
+      springframework:
+        cache: TRACE

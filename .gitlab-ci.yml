@@ -1,0 +1,30 @@
+default:
+  image: docker:24.0.5
+  services:
+    - docker:24.0.5-dind
+  before_script:
+    - docker info
+
+stages:
+  - build
+  - deploy
+
+build_job:
+  stage: build
+  script: |
+    echo "Building the application"
+    docker login registry.gitlab.com -u $DOCER_USERNAME -p $DOCKER_PASSWORD
+    docker build -t registry.gitlab.com/bijit-mondal/codeitup:0.0.1 .
+    docker push registry.gitlab.com/bijit-mondal/codeitup:0.0.1
+
+deploy_job:
+  stage: deploy
+  script: |
+    echo "Deploying the application"
+    docker login registry.gitlab.com -u $DOCER_USERNAME -p $DOCKER_PASSWORD
+    docker pull registry.gitlab.com/bijit-mondal/codeitup:0.0.1
+    docker run -d -p 8080:8080 registry.gitlab.com/bijit-mondal/codeitup:0.0.1
+  tags:
+    - linode-deploy-runner
+  only:
+    - deploy
