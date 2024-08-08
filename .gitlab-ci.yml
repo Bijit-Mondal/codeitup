@@ -13,8 +13,8 @@ build_job:
   stage: build
   script: |
     echo "Building the application"
-    echo "DOCKER_USERNAME=$DOCKER_USERNAME"
-    echo "DOCKER_PASSWORD=$DOCKER_PASSWORD"
+    echo $DOCKER_USERNAME
+    echo $DOCKER_PASSWORD
     docker login registry.gitlab.com -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
     docker build -t registry.gitlab.com/bijit-mondal/codeitup:$CI_COMMIT_SHA .
     docker push registry.gitlab.com/bijit-mondal/codeitup:$CI_COMMIT_SHA
