@@ -44,16 +44,16 @@ public class SubmissionCallbackService {
         // Some issue that I am facing is pendingTestCases doesn't become 0 even after all test cases are completed
 //      // It is remaining 1 even after all test cases are completed
         if (pendingTestCases.size() == 1) {
-            boolean accepted = failedTestCases.isEmpty();
+            boolean accepted = failedTestCases.size() <= 1;
             Submission submission = submissionRepository.findById(testCase.getSubmissionId())
                     .orElseThrow(() -> new ApiRequestExceptionNotFound("Submission not found"));
 
             submission.setSubmissionResult(accepted ? SubmissionResult.ACCEPTED : SubmissionResult.REJECTED);
-            log.info("Submission result: {}", submission.getSubmissionResult());
-            submission.setTime(allTestCaseData.stream()
-                    .mapToDouble(tc -> Double.parseDouble(tc.getTime()))
-                    .max().orElse(0));
-            submission.setMemory(allTestCaseData.stream().mapToInt(TestCases::getMemory).max().orElse(0));
+//            submission.setTime(allTestCaseData.stream()
+//                    .mapToDouble(tc -> Double.parseDouble(tc.getTime()))
+//                    .max().orElse(0));
+//            submission.setMemory(allTestCaseData.stream().mapToInt(TestCases::getMemory).max().orElse(0));
+            log.info("Submission result: {}", submission);
             submissionRepository.save(submission);
         }
     }

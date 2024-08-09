@@ -20,7 +20,5 @@ public class LanguageRequest {
     @NotNull(message = "Name can't be null")
     private String aceEditor;
 
-    @NotNull(message = "judge0 id can't be null")
     private Integer judge0id;
-
 }

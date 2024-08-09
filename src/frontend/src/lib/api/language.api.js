@@ -12,7 +12,8 @@ export const getAllLanguage = async () => {
 }
 
 export const addLanguage = async (data) => {
-    const response =  await fetchWithAuth('/api/v1/open/language', {
+    console.log(data)
+    const response =  await fetchWithAuth('/api/v1/admin/language', {
         method: 'POST',
         body: JSON.stringify(data)
     });

@@ -56,6 +56,11 @@ const routes = [
     component: () => import("../views/admin/AdminView"),
     children: [
       {
+        path: 'languages',
+        name: 'languages',
+        component: () => import("../views/admin/LanguageView/LangView")
+      },
+      {
         path: 'problems',
         children: [
           {
