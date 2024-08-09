@@ -9,11 +9,13 @@ import cc.codedhyan.codeitup.problem.model.TestCasesResult;
 import cc.codedhyan.codeitup.problem.repository.SubmissionRepository;
 import cc.codedhyan.codeitup.problem.repository.TestCasesRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class SubmissionCallbackService {
     private final TestCasesRepository testCasesRepository;
@@ -34,17 +36,21 @@ public class SubmissionCallbackService {
 
         List<TestCases> failedTestCases = allTestCaseData.stream()
                 .filter(tc -> tc.getTestCasesResult() != TestCasesResult.ACCEPTED).toList();
-
+        log.info("Pending test cases: {}", pendingTestCases.size());
+        log.info("Failed test cases: {}", failedTestCases.size());
+        log.info("All test cases: {}", allTestCaseData.size());
         if (pendingTestCases.isEmpty()) {
             boolean accepted = failedTestCases.isEmpty();
             Submission submission = submissionRepository.findById(testCase.getSubmissionId())
                     .orElseThrow(() -> new ApiRequestExceptionNotFound("Submission not found"));
 
             submission.setSubmissionResult(accepted ? SubmissionResult.ACCEPTED : SubmissionResult.REJECTED);
-            submission.setTime(allTestCaseData.stream()
-                    .mapToDouble(tc -> Double.parseDouble(tc.getTime()))
-                    .max().orElse(0));
-            submission.setMemory(allTestCaseData.stream().mapToInt(TestCases::getMemory).max().orElse(0));
+            log.info("Submission result: {}", submission.getSubmissionResult());
+//            Memory and time returning null, why?
+//            submission.setTime(allTestCaseData.stream()
+//                    .mapToDouble(tc -> Double.parseDouble(tc.getTime()))
+//                    .max().orElse(0));
+//            submission.setMemory(allTestCaseData.stream().mapToInt(TestCases::getMemory).max().orElse(0));
             submissionRepository.save(submission);
         }
     }
