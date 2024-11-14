@@ -18,7 +18,7 @@ import java.util.List;
 @Table(name = "_languages")
 public class Language {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(nullable = false)

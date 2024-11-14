@@ -62,3 +62,6 @@ build/
 
 ### VS Code ###
 .vscode/
+src/frontend/node/node
+src/frontend/node/npm
+src/frontend/node/npm.cmd
