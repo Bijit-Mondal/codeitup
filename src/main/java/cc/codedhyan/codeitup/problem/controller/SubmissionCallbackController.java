@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/open/submission-callback")
 @Slf4j
-@CrossOrigin("http://45.79.123.242:2358")
+@CrossOrigin("*")
 public class SubmissionCallbackController {
     private final SubmissionCallbackService submissionCallbackService;
 

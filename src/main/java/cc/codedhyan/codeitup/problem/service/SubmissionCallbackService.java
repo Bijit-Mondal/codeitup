@@ -8,6 +8,7 @@ import cc.codedhyan.codeitup.problem.model.TestCases;
 import cc.codedhyan.codeitup.problem.model.TestCasesResult;
 import cc.codedhyan.codeitup.problem.repository.SubmissionRepository;
 import cc.codedhyan.codeitup.problem.repository.TestCasesRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ public class SubmissionCallbackService {
     private final TestCasesRepository testCasesRepository;
     private final SubmissionRepository submissionRepository;
 
-
+    @Transactional
     public void processSubmissionCallback(Judge0Response response) {
         TestCases testCase = testCasesRepository.findByJudge0TrackingId(response.getToken())
                 .orElseThrow(() ->  new ApiRequestExceptionNotFound("Test case not found"));
@@ -39,12 +40,8 @@ public class SubmissionCallbackService {
         log.info("Pending test cases: {}", pendingTestCases.size());
         log.info("Failed test cases: {}", failedTestCases.size());
         log.info("All test cases: {}", allTestCaseData.size());
-
-        // If there are no pending test cases, then the submission is complete
-        // Some issue that I am facing is pendingTestCases doesn't become 0 even after all test cases are completed
-//      // It is remaining 1 even after all test cases are completed
-        if (pendingTestCases.size() == 1) {
-            boolean accepted = failedTestCases.size() <= 1;
+        if (pendingTestCases.size() == 0) {
+            boolean accepted = failedTestCases.size() == 0;
             Submission submission = submissionRepository.findById(testCase.getSubmissionId())
                     .orElseThrow(() -> new ApiRequestExceptionNotFound("Submission not found"));
 
