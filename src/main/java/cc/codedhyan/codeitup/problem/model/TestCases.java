@@ -16,7 +16,7 @@ import java.time.OffsetDateTime;
 @Table(name = "_test_cases")
 public class TestCases {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private Integer ind;

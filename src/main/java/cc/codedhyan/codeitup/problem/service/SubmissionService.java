@@ -81,7 +81,8 @@ public class SubmissionService {
             RestTemplate restTemplate = new RestTemplate();
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.set("X-Auth-Token",RAPIDAPI_KEY);
+            // headers.set("X-Auth-Token",RAPIDAPI_KEY);
+            headers.set("x-rapidapi-key",RAPIDAPI_KEY);
             HttpEntity<String> entity = new HttpEntity<>(judge0SubmissionRequest, headers);
             ResponseEntity<String> response = restTemplate.exchange(
                     "https://"+RAPIDAPI_HOST+"/submissions/batch?base64_encoded=false",
@@ -118,7 +119,7 @@ public class SubmissionService {
             submissionNode.put("source_code", fullCode);
             submissionNode.put("stdin", input);
             submissionNode.put("expected_output", output);
-            submissionNode.put("callback_url","https://codeitup.bijit.xyz/api/v1/open/submission-callback");
+            submissionNode.put("callback_url","https://musical-winner-4667qvqppp9c64q-8080.app.github.dev/api/v1/open/submission-callback");
         }
         return judge0ApiNode.toString();
     }
