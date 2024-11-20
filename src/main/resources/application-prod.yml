@@ -1,6 +1,15 @@
 spring:
   mvc:
     static-path-pattern: /app/**
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    security:
+      protocol: "SSL"
+    ssl:
+      trust-store-location: classpath:/kafka-certs/client.truststore.jks
+      key-store-location: classpath:/kafka-certs/client.truststore.jks
+      trust-store-password: ""
+      key-store-password: ""
   jpa:
     hibernate:
       ddl-auto: update
