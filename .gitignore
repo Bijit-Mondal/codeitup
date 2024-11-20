@@ -65,3 +65,8 @@ build/
 src/frontend/node/node
 src/frontend/node/npm
 src/frontend/node/npm.cmd
+src/main/resources/kafka-certs/ca.pem
+src/main/resources/kafka-certs/service.cert
+src/main/resources/kafka-certs/service.key
+src/main/resources/kafka-certs/client.keystore.p12
+src/main/resources/kafka-certs/client.truststore.jks
