@@ -14,7 +14,7 @@
       <table v-if="!isLoading">
         <thead>
           <tr>
-            <th>Time</th>
+            <th>Submission Time</th>
             <th>Status</th>
             <th>User</th>
             <th>Language</th>

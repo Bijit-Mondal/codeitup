@@ -23,7 +23,7 @@
           v-model:value="localContent"
           :lang="selectedLanguageMode"
           :theme="theme"
-          style="height: 100%; width: 100%; margin: 0.02rem; border-radius: 5px"
+          style="height: 100%; width: 100%; border-radius: 5px"
       />
     </div>
   </div>
@@ -93,29 +93,12 @@ const theme = ref(themes.value[0].value);
 
 
 <style scoped>
-.code-editor > .code-editor__config {
-  margin-bottom: 0.5rem;
-}
 .code-editor > .code-editor__ace {
   height: 75vh;
 }
 </style>
 
 <style>
-.ace_content {
-  padding-top: 0.8rem;
-}
-.ace_gutter {
-  padding-top: 0.8rem;
-}
-.code-editor {
-  padding: 0 0 0 0.4rem;
-}
-@media (max-width: 768px) {
-  .code-editor {
-    padding: 0.4rem 0 0 0;
-  }
-}
 /* vs-select menu */
 .vs-select--input {
   color: var(--text);

@@ -1,8 +1,6 @@
 <template>
   <vs-popup :title="title" v-model:active="popupActivo">
-    <code>
-      {{ data }}
-    </code>
+    <pre><code>{{ formattedCode }}</code></pre>
   </vs-popup>
 </template>
 
@@ -15,21 +13,20 @@ const props = defineProps({
   isActive: Boolean,
   submissionId: String
 });
-const popupActivo = ref(false);
 
+const popupActivo = ref(false);
 watch(() => props.isActive, () => {
   popupActivo.value = true;
 });
 
-
 import { getSubmission } from "@/lib/api/submission.api";
-const data = ref(null);
+const formattedCode = ref('');
 
 watch(() => props.submissionId, async (submissionId) => {
   if (submissionId) {
     const response = await getSubmission(submissionId);
-    data.value = response.code;
+    // Directly using the raw code, formatting using replace to handle newlines and escape characters
+    formattedCode.value = response.code.replace(/\\n/g, '\n'); // Replace escaped newlines with actual newlines
   }
 });
-
 </script>
