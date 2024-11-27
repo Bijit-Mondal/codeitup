@@ -59,25 +59,25 @@ public class SubmissionCallbackService {
                     .orElseThrow(() -> new ApiRequestExceptionNotFound("Submission not found"));
 
             submission.setSubmissionResult(accepted ? SubmissionResult.ACCEPTED : SubmissionResult.REJECTED);
-            // Double maxTime = allTestCaseData.stream()
-            // .mapToDouble(tc -> {
-            //     try {
-            //         return Double.parseDouble(tc.getTime());
-            //     } catch (NumberFormatException e) {
-            //         log.warn("Invalid time format for test case {}: {}", tc.getId(), tc.getTime());
-            //         return 0;
-            //     }
-            // })
-            // .max()
-            // .orElse(0);
+            Double maxTime = allTestCaseData.stream()
+            .mapToDouble(tc -> {
+                try {
+                    return Double.parseDouble(tc.getTime());
+                } catch (NumberFormatException e) {
+                    log.warn("Invalid time format for test case {}: {}", tc.getId(), tc.getTime());
+                    return 0;
+                }
+            })
+            .max()
+            .orElse(0);
 
-            // Integer maxMemory = allTestCaseData.stream()
-            // .mapToInt(tc -> tc.getMemory() == null ? 0 : tc.getMemory())
-            // .max()
-            // .orElse(0);
+            Integer maxMemory = allTestCaseData.stream()
+            .mapToInt(tc -> tc.getMemory() == null ? 0 : tc.getMemory())
+            .max()
+            .orElse(0);
 
-            // submission.setTime(maxTime);
-            // submission.setMemory(maxMemory);
+            submission.setTime(maxTime);
+            submission.setMemory(maxMemory);
 
 
             log.info("Submission result: {}", submission);
