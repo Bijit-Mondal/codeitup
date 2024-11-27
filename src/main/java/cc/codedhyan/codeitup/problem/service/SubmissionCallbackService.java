@@ -1,5 +1,6 @@
 package cc.codedhyan.codeitup.problem.service;
 
+import cc.codedhyan.codeitup.config.constants.KafkaTopics;
 import cc.codedhyan.codeitup.exception.ApiRequestExceptionNotFound;
 import cc.codedhyan.codeitup.problem.Judge0Response;
 import cc.codedhyan.codeitup.problem.model.Submission;
@@ -8,9 +9,12 @@ import cc.codedhyan.codeitup.problem.model.TestCases;
 import cc.codedhyan.codeitup.problem.model.TestCasesResult;
 import cc.codedhyan.codeitup.problem.repository.SubmissionRepository;
 import cc.codedhyan.codeitup.problem.repository.TestCasesRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,11 +23,20 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class SubmissionCallbackService {
+    private final KafkaTemplate<String, Judge0Response> kafkaTemplate;
     private final TestCasesRepository testCasesRepository;
     private final SubmissionRepository submissionRepository;
 
-    @Transactional
     public void processSubmissionCallback(Judge0Response response) {
+        try {
+            kafkaTemplate.send(KafkaTopics.PROBLEM_SUBMISSION_WEBHOOK_TOPIC, response);
+        } catch (Exception e) {
+            log.error("Failed to send Kafka message for token: {}", response.getToken(), e);
+        }
+    }
+
+    @KafkaListener(topics = KafkaTopics.PROBLEM_SUBMISSION_WEBHOOK_TOPIC, groupId = "submission-group")
+    public void consumeSubmissionCallback(Judge0Response response){
         TestCases testCase = testCasesRepository.findByJudge0TrackingId(response.getToken())
                 .orElseThrow(() ->  new ApiRequestExceptionNotFound("Test case not found"));
         testCase.setTestCasesResult(outputMapping(response.getStatus().getDescription()));
@@ -46,13 +59,31 @@ public class SubmissionCallbackService {
                     .orElseThrow(() -> new ApiRequestExceptionNotFound("Submission not found"));
 
             submission.setSubmissionResult(accepted ? SubmissionResult.ACCEPTED : SubmissionResult.REJECTED);
-//            submission.setTime(allTestCaseData.stream()
-//                    .mapToDouble(tc -> Double.parseDouble(tc.getTime()))
-//                    .max().orElse(0));
-//            submission.setMemory(allTestCaseData.stream().mapToInt(TestCases::getMemory).max().orElse(0));
+            // Double maxTime = allTestCaseData.stream()
+            // .mapToDouble(tc -> {
+            //     try {
+            //         return Double.parseDouble(tc.getTime());
+            //     } catch (NumberFormatException e) {
+            //         log.warn("Invalid time format for test case {}: {}", tc.getId(), tc.getTime());
+            //         return 0;
+            //     }
+            // })
+            // .max()
+            // .orElse(0);
+
+            // Integer maxMemory = allTestCaseData.stream()
+            // .mapToInt(tc -> tc.getMemory() == null ? 0 : tc.getMemory())
+            // .max()
+            // .orElse(0);
+
+            // submission.setTime(maxTime);
+            // submission.setMemory(maxMemory);
+
+
             log.info("Submission result: {}", submission);
             submissionRepository.save(submission);
         }
+        // acknowledgment.acknowledge();
     }
 
     private TestCasesResult outputMapping(String statusDescription) {

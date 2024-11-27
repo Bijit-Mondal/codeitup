@@ -119,7 +119,7 @@ public class SubmissionService {
             submissionNode.put("source_code", fullCode);
             submissionNode.put("stdin", input);
             submissionNode.put("expected_output", output);
-            submissionNode.put("callback_url","https://musical-winner-4667qvqppp9c64q-8080.app.github.dev/api/v1/open/submission-callback");
+            submissionNode.put("callback_url","https://musical-winner-4667qvqppp9c64q-9192.app.github.dev/api/v1/open/submission-callback");
         }
         return judge0ApiNode.toString();
     }

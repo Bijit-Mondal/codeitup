@@ -2,13 +2,25 @@ spring:
   mvc:
     static-path-pattern: /app/**
   kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: "submission-group"
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: "*"
     security:
       protocol: "SSL"
+    bootstrap-servers: kafka-ed4a0dc-spoton.b.aivencloud.com:23665
     ssl:
       trust-store-location: classpath:/kafka-certs/client.truststore.jks
-      key-store-location: classpath:/kafka-certs/client.truststore.jks
       trust-store-password: ""
+      key-store-location:  classpath:/kafka-certs/client.keystore.p12
       key-store-password: ""
   jpa:
     hibernate:
