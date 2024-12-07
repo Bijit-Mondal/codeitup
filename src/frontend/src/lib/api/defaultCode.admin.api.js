@@ -1,7 +1,8 @@
+import { API_ENDPOINTS } from '../constants/api';
 import { fetchWithAuth } from "./fetchWithAuth";
 
 export const addDefaultCode = async (data) => {
-    const response =  await fetchWithAuth('/api/v1/admin/default-code', {
+    const response = await fetchWithAuth(API_ENDPOINTS.ADMIN.DEFAULT_CODE, {
         method: 'POST',
         body: JSON.stringify(data)
     });
@@ -13,7 +14,7 @@ export const addDefaultCode = async (data) => {
 }
 
 export const getDefaultCodeByProblem = async (id) => {
-    const response =  await fetchWithAuth(`/api/v1/admin/default-code/${id}`, {
+    const response = await fetchWithAuth(`${API_ENDPOINTS.ADMIN.DEFAULT_CODE}/${id}`, {
         method: 'GET',
     });
     if(!response.ok){
@@ -24,7 +25,7 @@ export const getDefaultCodeByProblem = async (id) => {
 }
 
 export const updateDefaultCode = async (problemId, languageId, data) => {
-    const response =  await fetchWithAuth(`/api/v1/admin/default-code/${problemId}/${languageId}`, {
+    const response = await fetchWithAuth(`${API_ENDPOINTS.ADMIN.DEFAULT_CODE}/${problemId}/${languageId}`, {
         method: 'PUT',
         body: JSON.stringify(data)
     });

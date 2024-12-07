@@ -1,5 +1,7 @@
+import { API_ENDPOINTS } from '../constants/api';
+
 export const register = async (data) => {
-    const response = await fetch('/api/v1/auth/register', {
+    const response = await fetch(API_ENDPOINTS.AUTH.REGISTER, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -14,7 +16,7 @@ export const register = async (data) => {
 };
 
 export const login = async (data) => {
-    const response = await fetch('/api/v1/auth/login', {
+    const response = await fetch(API_ENDPOINTS.AUTH.LOGIN, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -29,7 +31,7 @@ export const login = async (data) => {
 };
 
 export const otpValidate = async (data) => {
-    const response = await fetch('/api/v1/auth/validate', {
+    const response = await fetch(API_ENDPOINTS.AUTH.VALIDATE_OTP, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

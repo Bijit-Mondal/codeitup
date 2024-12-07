@@ -1,7 +1,8 @@
+import { API_ENDPOINTS } from '../constants/api';
 import { fetchWithAuth } from "./fetchWithAuth";
 
 export const getAllLanguage = async () => {
-    const response =  await fetchWithAuth('/api/v1/open/language', {
+    const response =  await fetchWithAuth(API_ENDPOINTS.PROBLEMS.LANGUAGES, {
         method: 'GET',
     });
     if(!response.ok){
@@ -13,7 +14,7 @@ export const getAllLanguage = async () => {
 
 export const addLanguage = async (data) => {
     console.log(data)
-    const response =  await fetchWithAuth('/api/v1/admin/language', {
+    const response =  await fetchWithAuth(API_ENDPOINTS.ADMIN.LANGUAGES, {
         method: 'POST',
         body: JSON.stringify(data)
     });
