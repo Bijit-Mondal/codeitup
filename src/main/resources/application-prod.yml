@@ -14,14 +14,14 @@ spring:
           json:
             trusted:
               packages: "*"
-    security:
-      protocol: "SSL"
-    bootstrap-servers: kafka-ed4a0dc-spoton.b.aivencloud.com:23665
-    ssl:
-      trust-store-location: classpath:/kafka-certs/client.truststore.jks
-      trust-store-password: ""
-      key-store-location:  classpath:/kafka-certs/client.keystore.p12
-      key-store-password: ""
+    # security:
+    #   protocol: "SSL"
+    bootstrap-servers: localhost:29092
+    # ssl:
+    #   trust-store-location: classpath:/kafka-certs/client.truststore.jks
+    #   trust-store-password: "#bijit567mondaL"
+    #   key-store-location:  classpath:/kafka-certs/client.keystore.p12
+    #   key-store-password: "#bijit567mondaL"
   jpa:
     hibernate:
       ddl-auto: update
