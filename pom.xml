@@ -18,6 +18,7 @@
 		<java.version>17</java.version>
 		<node.version>v18.10.0</node.version>
 		<npm.version>8.19.2</npm.version>
+		<org-apache-tomcat-embed.tomcat-embed-core.version>10.1.44</org-apache-tomcat-embed.tomcat-embed-core.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -210,5 +211,14 @@
 			</resource>
 		</resources>
 	</build>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.apache.tomcat.embed</groupId>
+				<artifactId>tomcat-embed-core</artifactId>
+				<version>${org-apache-tomcat-embed.tomcat-embed-core.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 </project>
